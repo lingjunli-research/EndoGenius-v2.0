@@ -17,18 +17,12 @@ import csv
 import webbrowser
 from tkinter.tix import *
 
+import subprocess
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 pd.options.mode.chained_assignment = None  # default='warn'
-
-    # img=Image.open(path_MS2) # read the image file
-    # img=img.resize((497,355)) # new width & height
-    # img=ImageTk.PhotoImage(img)
-    # e1 =Label(optical_image_frame)
-    # e1.pack(side=TOP)
-    # e1.image = img # keep a reference! by attaching it to a widget attribute
-    # e1['image']=img # Show Image 
 
 
 window = Tk()
@@ -36,9 +30,6 @@ window = Tk()
 window.geometry("778x870")
 window.configure(bg = "#423C56")
 window.title('EndoGenius')
-
-# window.state('zoomed')
-#window.iconbitmap(r"EndoGenius.ico")
 
 input_path_MS2 = StringVar()
 input_path_format_MS2 = StringVar()
@@ -70,32 +61,234 @@ output_dir_path = StringVar()
 eg_threshold = StringVar()
 
 
-# input_path_MS2.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\fasta_formatted\2021_0817_CoG_1.ms2")
-input_path_format_MS2.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\2021_0817_CoG_1.txt")
+input_path_MS2.set(r"D:\Manuscripts\2023_fractionated_spectral_library\SL_aquisition_data\crustacean\STNS\STNS_F8.ms2")
+#input_path_format_MS2.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\2021_0817_CoG_1.txt")
 mz_range_min.set('50')
 mz_range_max.set('3000')
 min_intensity.set('1000')
 max_precursor_z.set('8')
 max_fragment_z.set('4')
-database_csv_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_db_w_decoy.csv")
-target_peptide_list_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_target_list.csv")
-# fasta_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\fasta_formatted\short_fasta.fasta")
+# database_csv_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_db_w_decoy.csv")
+# target_peptide_list_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_target_list.csv")
+fasta_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\OG_SL_files\EndoGenius_DDA_search_results\input_files\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
 precursor_err.set('20')
 fragment_err.set('0.02')
-max_mods_pep.set('0')
-# amid_var.set(1)
-# ox_var.set(1)
-# pgE_var.set(1)
-# sulf_var.set(1)
-# pgQ_var.set(1)
-motif_db_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\motif_db_20230621.csv")
+max_mods_pep.set('3')
+amid_var.set(1)
+ox_var.set(1)
+pgE_var.set(1)
+sulf_var.set(1)
+pgQ_var.set(1)
+motif_db_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\OG_SL_files\EndoGenius_DDA_search_results\input_files\NP_motif_db.csv")
 confident_coverage_threshold.set('70')
 standard_err.set('0.1')
 max_adjacent_swapped_AAs.set('2')
-# FDR_threshold.set('0.10')
+# FDR_threshold.set('20')
 max_swapped_AA.set('1')
-output_dir_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.0.7\iteration1")
+output_dir_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data\STNS_F8")
 eg_threshold.set('1000')
+
+#def launch_lib_build_gui():
+def launch_lib_build_gui():
+    OUTPUT_PATH = Path(__file__).parent
+    ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+        
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
+    
+    lib_window = Toplevel(window)
+    lib_window.geometry("729x295")
+    lib_window.configure(bg = "#423C56")
+    lib_window.attributes("-topmost", True)
+
+
+
+    eg_results_dir = StringVar()
+    out_dir = StringVar()
+    error = StringVar()
+    
+    # eg_results_dir.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data")
+    # out_dir.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.0\sl_test2")
+    error.set('0.02')
+    
+    def in_dir_path_get():
+        in_dir_path_out = filedialog.askdirectory() 
+        eg_results_dir.set(in_dir_path_out)
+        
+    def out_dir_path_get():
+        out_dir_path_out = filedialog.askdirectory() 
+        out_dir.set(out_dir_path_out)
+    
+    def launch_library_process():
+
+        eg_results_dir_get = eg_results_dir.get()
+        out_dir_get = out_dir.get()
+        error_get = float(error.get())
+        
+        from sl_builder_driver import build_a_SL
+        
+        build_a_SL(eg_results_dir_get,out_dir_get,error_get)
+        
+        messagebox.showinfo("Process Complete", "The library has been built.")
+    
+    
+
+    canvas = Canvas(
+        lib_window,
+        bg = "#423C56",
+        height = 295,
+        width = 729,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge"
+    )
+    
+    canvas.place(x = 0, y = 0)
+    canvas.create_text(
+        19.0,
+        9.0,
+        anchor="nw",
+        text="Library Builder",
+        fill="#FFFFFF",
+        font=("Inter", 64 * -1)
+    )
+    
+    canvas.create_rectangle(
+        19.0,
+        90.0,
+        709.0,
+        271.0,
+        fill="#D9D9D9",
+        outline="")
+    
+    canvas.create_text(
+        26.0,
+        106.0,
+        anchor="nw",
+        text="EndoGenius Results Directory",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+    
+    
+    entry_1 = Entry(
+        canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable = eg_results_dir
+    )
+    entry_1.place(
+        x=274.0,
+        y=106.0,
+        width=340.0,
+        height=28.0
+    )
+    
+    button_image_1 = PhotoImage(
+        file=relative_to_assets("lib_button_1.png"))
+    button_1 = Button(
+        canvas,
+        text='Browse',
+        borderwidth=0,
+        highlightthickness=0,
+        command=in_dir_path_get,
+        relief="flat"
+    )
+    button_1.place(
+        x=625.0,
+        y=106.0,
+        width=77.21710205078125,
+        height=30.0
+    )
+    
+    canvas.create_text(
+        26.0,
+        182.0,
+        anchor="nw",
+        text="Output Directory",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+    
+    
+    entry_2 = Entry(
+        canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable = out_dir
+    )
+    entry_2.place(
+        x=274.0,
+        y=182.0,
+        width=340.0,
+        height=28.0
+    )
+    
+    canvas.create_text(
+        26.0,
+        144.0,
+        anchor="nw",
+        text="Fragment error threshold (Da)",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+    
+    
+    entry_3 = Entry(
+        lib_window,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable = error
+    )
+    entry_3.place(
+        x=274.0,
+        y=144.0,
+        width=69.0,
+        height=28.0
+    )
+    
+
+    button_2 = Button(
+        canvas,
+        text='Browse',
+        borderwidth=0,
+        highlightthickness=0,
+        command=out_dir_path_get,
+        relief="flat"
+    )
+    button_2.place(
+        x=625.0,
+        y=182.0,
+        width=77.21710205078125,
+        height=30.0
+    )
+    
+    button_3 = Button(
+        canvas,
+        borderwidth=0,
+        highlightthickness=0,
+        text = 'Build Library',
+        command=launch_library_process,
+        relief="flat"
+    )
+    button_3.place(
+        x=303.0,
+        y=228.0,
+        width=141.0,
+        height=30.0
+    )
+    lib_window.resizable(True, True)
+    lib_window.mainloop()
+
+def launch_diann():
+    try:
+        subprocess.Popen([r'C:\DIA-NN\1.8.1\DIA-NN.exe'])  # Replace with the actual command to launch DIA-NN
+        messagebox.showinfo("Launch", "DIA-NN GUI is launching...")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to launch DIA-NN: {e}")
 
 def launch_quant():
 
@@ -221,6 +414,7 @@ def launch_quant():
         image=quant_entry_image_1
     )
     quant_entry_1 = Entry(
+        quant_canvas,
         bd=0,
         bg="#FFFFFF",
         highlightthickness=0,
@@ -266,6 +460,7 @@ def launch_quant():
         image=quant_entry_image_2
     )
     quant_entry_2 = Entry(
+        quant_canvas,
         bd=0,
         bg="#FFFFFF",
         highlightthickness=0,
@@ -320,6 +515,7 @@ def launch_quant():
         image=quant_entry_image_3
     )
     quant_entry_3 = Entry(
+        quant_canvas,
         bd=0,
         bg="#FFFFFF",
         highlightthickness=0,
@@ -332,13 +528,6 @@ def launch_quant():
         height=28.0
     )
 
-    # entry_image_4 = PhotoImage(
-    #     file=relative_to_assets("entry_4.png"))
-    # entry_bg_4 = canvas.create_image(
-    #     187.0,
-    #     298.0,
-    #     image=entry_image_4
-    # )
     quant_entry_4 = Listbox(quant_canvas,width=50)
     quant_entry_4.place(
         x=17.0,
@@ -356,13 +545,6 @@ def launch_quant():
         font=("Inter", 16 * -1)
     )
 
-    # entry_image_5 = PhotoImage(
-    #     file=relative_to_assets("entry_5.png"))
-    # entry_bg_5 = canvas.create_image(
-    #     542.0,
-    #     298.0,
-    #     image=entry_image_5
-    # )
     quant_entry_5 = Listbox(quant_canvas,width=50)
     quant_entry_5.place(
         x=372.0,
@@ -688,106 +870,7 @@ def begin_search_confirmed():
             pymsgbox.alert('Your database search is complete','Status Update')
 
 def begin_search():
-    # mz_min_check = mz_range_min.get()
-    # mz_max_check= mz_range_max.get()
-    # intensity_check= min_intensity.get()
-    # precz_check= max_precursor_z.get()
-    # fragz_check= max_fragment_z.get()
-    # prec_err_check= precursor_err.get()
-    # frag_err_check= fragment_err.get()
-    # maxmods_check= max_mods_pep.get()
-    # motifDB_check= motif_db_path.get()
-    # cov_check= confident_coverage_threshold.get()
-    # output_directory_check= output_dir_path.get()
-    
-    # if len(mz_min_check)==0:
-    #     messagebox.showerror('Input Error', 'Input minimum m/z value')
-    # if len(mz_max_check)==0:
-    #     messagebox.showerror('Input Error', 'Input maximum m/z value')
-    # if len(intensity_check)==0:
-    #     messagebox.showerror('Input Error', 'Input minimum intensity value')
-    # if len(precz_check)==0:
-    #     messagebox.showerror('Input Error', 'Input maximum precursor charge value')
-    # if len(fragz_check)==0:
-    #     messagebox.showerror('Input Error', 'Input maximum fragment charge value')
-    # if len(prec_err_check)==0:
-    #     messagebox.showerror('Input Error', 'Input maximum precursor error value')
-    # if len(frag_err_check)==0:
-    #     messagebox.showerror('Input Error', 'Input maximum fragment error value')
-    # if len(maxmods_check)==0:
-    #     messagebox.showerror('Input Error', 'Input maximum # modifications per peptide\n\nIf no modifications selected, input 0')
-    # if len(motifDB_check)==0:
-    #     messagebox.showerror('Input Error', 'Select motif database')
-    # if len(cov_check)==0:
-    #     messagebox.showerror('Input Error', 'Input confidence coverage threshold')
-    # if len(output_directory_check)==0:
-    #     messagebox.showerror('Input Error', 'Select output folder')
-        
-    # rawMS2_check= input_path_MS2.get()
-    # formatMS2_check= input_path_format_MS2.get()
-    # if len(rawMS2_check)==0 and len(formatMS2_check)==0:
-    #     messagebox.showerror('Input Error', 'Input spectral file')
-    # if len(rawMS2_check)>0 and len(formatMS2_check)>0:
-    #     messagebox.showerror('Input Error', 'Input either raw or formatted spectral file, not both')
-    
-    # fasta_check= fasta_path.get()
-    # formatDB_check= database_csv_path.get()
-    # if len(fasta_check)==0 and len(formatDB_check)==0:
-    #     messagebox.showerror('Input Error', 'Input database file')
-    # if len(fasta_check)>0 and len(formatDB_check)>0:
-    #     messagebox.showerror('Input Error', 'Input either raw .fasta file or formatted .csv database file, not both')
-    
-    # if len(rawMS2_check)>0:
-    #     if '_formatted.ms2' in rawMS2_check:
-    #         mzml_path_check = rawMS2_check.replace('_formatted.ms2','.mzML')
-    #     elif '_formatted.txt' in rawMS2_check:
-    #         mzml_path_check = rawMS2_check.replace('_formatted.txt','.mzML')
-    #     elif '.txt' in rawMS2_check:
-    #         mzml_path_check = rawMS2_check.replace('.txt','.mzML')
-    #     elif '.ms2' in rawMS2_check:
-    #         mzml_path_check = rawMS2_check.replace('.ms2','.mzML')
-        
-    #     mzml_path_valid_check = os.path.isfile(mzml_path_check)
-    #     if mzml_path_valid_check == False:
-    #         messagebox.showerror('Input Error', 'Corresponding .mzML file does not exist')
-    #     else:
-    #         pass
-    
-    # elif len(formatMS2_check)>0:
-    #     if '_formatted.ms2' in formatMS2_check:
-    #         mzml_path_check = formatMS2_check.replace('_formatted.ms2','.mzML')
-    #     elif '_formatted.txt' in formatMS2_check:
-    #         mzml_path_check = formatMS2_check.replace('_formatted.txt','.mzML')
-    #     elif '.txt' in formatMS2_check:
-    #         mzml_path_check = formatMS2_check.replace('.txt','.mzML')
-    #     elif '.ms2' in formatMS2_check:
-    #         mzml_path_check = formatMS2_check.replace('.ms2','.mzML')
-    #     if mzml_path_valid_check == False:
-    #         messagebox.showerror('Input Error', 'Corresponding .mzML file does not exist')
-    #     else:
-    #         pass
-        
-    # fdr_check= FDR_threshold.get()
-    # eg_check= EG_threshold.get()
-    # if len(fdr_check)==0 and len(eg_check)==0:
-    #     messagebox.showerror('Input Error', 'Input either FDR threshold or EndoGenius score threshold')
-    # if len(fdr_check)>0 and len(eg_check)>0:
-    #     messagebox.showerror('Input Error', 'Input either FDR cutoff or EndoGenius score cutoff, not both')
-        
-    # if len(database_csv_path.get()) > 0:
-    #     if len(target_peptide_list_path.get()) == 0:
-    #         messagebox.showerror('Input Error', 'Target list not specified')
 
-
-    
-    
-    
-    
-    # output_parent_directory = output_dir_path.get()
-    # raw_file_formatted_path = input_path_format_MS2.get()
-    # target_path = target_peptide_list_path.get()
-    
-    # checked_clear_begin_search(predefined_db_path,output_parent_directory,raw_file_formatted_path,target_path)
     mz_min_check = mz_range_min.get()
     mz_max_check= mz_range_max.get()
     intensity_check= min_intensity.get()
@@ -912,10 +995,7 @@ def begin_search():
 
 menubar = Menu(window)
 filemenu = Menu(menubar, tearoff=0)
-# filemenu.add_command(label="New", command=donothing)
-# filemenu.add_command(label="Open", command=donothing)
-# filemenu.add_command(label="Save", command=donothing)
-#filemenu.add_separator()
+
 filemenu.add_command(label="Exit", command=window.quit)
 menubar.add_cascade(label="File", menu=filemenu)
 
@@ -927,6 +1007,8 @@ menubar.add_cascade(label="Help", menu=helpmenu)
 
 toolmenu = Menu(menubar, tearoff=0)
 toolmenu.add_command(label="Quantiation Report", command = launch_quant)
+toolmenu.add_command(label="Build Spectral Library", command = launch_lib_build_gui)
+toolmenu.add_command(label="Launch DIA-NN GUI", command=launch_diann)
 menubar.add_cascade(label="Tools", menu=toolmenu)
 
 window.config(menu=menubar)
@@ -1116,25 +1198,6 @@ canvas.create_text(
     font=("Inter", 16 * -1)
 )
 
-# canvas.create_text(
-#     22.0,
-#     668.0,
-#     anchor="nw",
-#     text="Standard\nerror %",
-#     fill="#000000",
-#     font=("Inter", 16 * -1),
-#     justify='center'
-# )
-
-# canvas.create_text(
-#     180.0,
-#     668.0,
-#     anchor="nw",
-#     text="EndoGenius\nScore Threshold",
-#     fill="#000000",
-#     font=("Inter", 16 * -1),
-#     justify='center'
-# )
 
 canvas.create_text(
     5.0,
@@ -1618,26 +1681,6 @@ entry_8.place(
     height=28.0
 )
 
-# entry_image_9 = PhotoImage(
-#     file=relative_to_assets("entry_9.png"))
-# entry_bg_9 = canvas.create_image(
-#     127.5,
-#     685.0,
-#     image=entry_image_9
-# )
-# entry_9 = Entry(
-#     bd=0,
-#     bg="#FFFFFF",
-#     highlightthickness=0,
-#     textvariable=standard_err
-# )
-
-# entry_9.place(
-#     x=101.0,
-#     y=670.0,
-#     width=53.0,
-#     height=28.0
-# )
 
 entry_image_10 = PhotoImage(
     file=relative_to_assets("entry_10.png"))
@@ -1828,26 +1871,7 @@ entry_18.place(
     height=28.0
 )
 
-# entry_image_19 = PhotoImage(
-#     file=relative_to_assets("entry_19.png"))
-# entry_bg_19 = canvas.create_image(
-#     344.5,
-#     684.0,
-#     image=entry_image_19
-# )
-# entry_19 = Entry(
-#     bd=0,
-#     bg="#FFFFFF",
-#     highlightthickness=0,
-#     textvariable=max_adjacent_swapped_AAs
-# )
 
-# entry_19.place(
-#     x=318.0,
-#     y=669.0,
-#     width=53.0,
-#     height=28.0
-# )
 
 entry_image_20 = PhotoImage(
     file=relative_to_assets("entry_20.png"))

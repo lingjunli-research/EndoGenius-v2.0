@@ -408,9 +408,9 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
     
     def raw_file_data_extraction(raw_file_path):
         raw_converter = pd.read_csv(raw_converter_path, sep=",",skiprows=[0], names= ['fragment_mz',
-                                                                                      'fragment_resolution',
-                                                                                      'fragment_z',
                                                                                       'fragment_intensity',
+                                                                                      'fragment_z',
+                                                                                      'fragment_resolution',
                                                                                       'precursor_mz',
                                                                                       'ms2_scan',
                                                                                       'precursor_z',
