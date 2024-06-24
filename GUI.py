@@ -88,7 +88,327 @@ max_swapped_AA.set('1')
 output_dir_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data\STNS_F8")
 eg_threshold.set('1000')
 
-#def launch_lib_build_gui():
+def launch_motif_build_gui():
+    OUTPUT_PATH = Path(__file__).parent
+    ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
+
+    motif_window = Toplevel(window)
+    motif_window.geometry("770x540")
+    motif_window.configure(bg = "#423C56")
+    motif_window.attributes("-topmost", True)
+    motif_window.title('MotifQuest')
+
+    # Initialize StringVar variables before creating Entry widgets
+    min_motif_len_in = StringVar()
+    min_motif_len_in.set('3')
+
+    min_num_motif_inst = StringVar()
+    min_num_motif_inst.set('2')
+
+    part_motif_flank = StringVar()
+    part_motif_flank.set('3')
+
+    fasta_path_input = StringVar()
+    fasta_path_input.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\input\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
+
+    t_val = StringVar()
+    t_val.set('0')
+
+    output_dir = StringVar()
+    output_dir.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\output")
+
+    clustal_path = StringVar()
+    clustal_path.set(r"C:\Users\lawashburn\Downloads\clustal-omega-1.2.2\clustal-omega-1.2.2-win64\clustalo.exe")
+
+    def build_motif_db():
+
+        from MotifQuest_code_v02 import start_building_a_motif_db
+        in_file = fasta_path_input.get()
+        output_folder_path = output_dir.get()
+        min_motif_len_get = min_motif_len_in.get()
+        min_motif_len_get = int(min_motif_len_get)
+        
+        t_value_get = t_val.get()
+        t_value_get = int(t_value_get)
+        
+        t_value_format = []
+        t_value_format.append(t_value_get)
+
+        min_motif_inst_get = min_num_motif_inst.get()
+        min_motif_inst_get = int(min_motif_inst_get)
+        
+        clustal_omega_path = clustal_path.get()
+
+        start_building_a_motif_db(in_file, output_folder_path, t_value_format, min_motif_len_get, min_motif_inst_get,clustal_omega_path)
+        messagebox.showinfo("Finished", "MotifQuest has finished")
+
+    def browse_files_fasta():
+        filename = filedialog.askopenfilename(filetypes=[("FASTA Files", "*.fasta")])
+        fasta_path_input.set(filename)
+
+    def browse_files_clustalo():
+        filename = filedialog.askopenfilename(filetypes=[("Executable Files", "*.exe")])
+        clustal_path.set(filename)
+
+    def browse_files():
+        filename = filedialog.askdirectory()
+        output_dir.set(filename)
+
+    motif_canvas = Canvas(
+        motif_window,
+        bg = "#423C56",
+        height = 750,
+        width = 778,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge"
+    )
+
+    motif_canvas.place(x = 0, y = 0)
+    motif_canvas.create_rectangle(
+        11.0,
+        101.0,
+        748.0,
+        517.0,
+        fill="#D9D9D9",
+        outline=""
+    )
+
+    motif_canvas.create_text(
+        17.0,
+        123.0,
+        anchor="nw",
+        text="Import FASTA Database",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    motif_canvas.create_text(
+        5.0,
+        0.0,
+        anchor="nw",
+        text="MotifQuest",
+        fill="#FFFFFF",
+        font=("Inter", 64 * -1)
+    )
+
+    motif_entry_1 = Entry(
+        motif_canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable=fasta_path_input
+    )
+    motif_entry_1.place(
+        x=213.0,
+        y=123.0,
+        width=340.0,
+        height=28.0
+    )
+
+    entry_2 = Entry(
+        motif_canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable=min_motif_len_in
+    )
+    entry_2.place(
+        x=213.0,
+        y=209.0,
+        width=340.0,
+        height=28.0
+    )
+
+    entry_3 = Entry(
+        motif_canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable=min_num_motif_inst
+    )
+    entry_3.place(
+        x=213.0,
+        y=259.0,
+        width=200.0,
+        height=28.0
+    )
+
+    entry_4 = Entry(
+        motif_canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable=part_motif_flank
+    )
+    entry_4.place(
+        x=213.0,
+        y=308.0,
+        width=340.0,
+        height=28.0
+    )
+
+    entry_5 = Entry(
+        motif_canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable=clustal_path
+    )
+    entry_5.place(
+        x=213.0,
+        y=400.0,
+        width=340.0,
+        height=28.0
+    )
+
+    button_1 = Button(
+        motif_window,
+        text='Browse',
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: browse_files_fasta(),
+        relief="flat"
+    )
+    button_1.place(
+        x=575.0,
+        y=123.0,
+        width=78.21710205078125,
+        height=30.0
+    )
+
+    motif_canvas.create_text(
+        37.0,
+        360.0,
+        anchor="nw",
+        text="Export Directory:",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    entry_7 = Entry(
+        motif_canvas,
+        bd=0,
+        highlightthickness=0,
+        textvariable=output_dir
+    )
+    entry_7.place(
+        x=213.0,
+        y=355.0,
+        width=340.0,
+        height=28.0
+    )
+
+    button_3 = Button(
+        motif_window,
+        text='Browse',
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: browse_files(),
+        relief="flat"
+    )
+    button_3.place(
+        x=575.0,
+        y=355.0,
+        width=78.21710205078125,
+        height=30.0
+    )
+
+    motif_canvas.create_text(
+        33.0,
+        173.0,
+        anchor="nw",
+        text="T-Value range",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    motif_canvas.create_text(
+        21.0,
+        218.0,
+        anchor="nw",
+        text="Minimum Motif Length",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    motif_canvas.create_text(
+        15.0,
+        260.0,
+        anchor="nw",
+        text="Minimum Number of\nMotif Instances",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    entry_8 = Entry(
+        motif_canvas,
+        bd=0,
+        bg="#FFFFFF",
+        highlightthickness=0,
+        textvariable=t_val
+    )
+    entry_8.place(
+        x=213.0,
+        y=166.0,
+        width=72.0,
+        height=28.0
+    )
+
+    motif_canvas.create_text(
+        18.0,
+        315.0,
+        anchor="nw",
+        text="Partial Motif Flank Size",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    motif_canvas.create_text(
+        18.0,
+        411.0,
+        anchor="nw",
+        text="Clustal Omega Path",
+        fill="#000000",
+        font=("Inter", 16 * -1)
+    )
+
+    button_4 = Button(
+        motif_window,
+        text='Begin Analysis',
+        borderwidth=0,
+        highlightthickness=0,
+        command=build_motif_db,
+        relief="flat"
+    )
+    button_4.place(
+        x=250.0,
+        y=450.0,
+        width=141.0,
+        height=30.0
+    )
+
+    button_5 = Button(
+        motif_window,
+        text='Browse',
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: browse_files_clustalo(),
+        relief="flat"
+    )
+    button_5.place(
+        x=575.0,
+        y=400.0,
+        width=78.21710205078125,
+        height=30.0
+    )
+
+    motif_window.resizable(False, False)
+    motif_window.mainloop()
+
 def launch_lib_build_gui():
     OUTPUT_PATH = Path(__file__).parent
     ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -285,7 +605,7 @@ def launch_lib_build_gui():
 
 def launch_diann():
     try:
-        subprocess.Popen([r'C:\DIA-NN\1.8.1\DIA-NN.exe'])  # Replace with the actual command to launch DIA-NN
+        subprocess.Popen([r'DIA-NN\1.8.1\DIA-NN.exe'])  # Replace with the actual command to launch DIA-NN
         messagebox.showinfo("Launch", "DIA-NN GUI is launching...")
     except Exception as e:
         messagebox.showerror("Error", f"Failed to launch DIA-NN: {e}")
@@ -1009,6 +1329,7 @@ toolmenu = Menu(menubar, tearoff=0)
 toolmenu.add_command(label="Quantiation Report", command = launch_quant)
 toolmenu.add_command(label="Build Spectral Library", command = launch_lib_build_gui)
 toolmenu.add_command(label="Launch DIA-NN GUI", command=launch_diann)
+toolmenu.add_command(label="Launch MotifQuest", command=launch_motif_build_gui)
 menubar.add_cascade(label="Tools", menu=toolmenu)
 
 window.config(menu=menubar)
