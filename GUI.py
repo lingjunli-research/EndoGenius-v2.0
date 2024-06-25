@@ -15,7 +15,7 @@ from Bio.SeqIO.FastaIO import SimpleFastaParser
 import pandas as pd
 import csv
 import webbrowser
-from tkinter.tix import *
+#from tkinter.tix import *
 
 import subprocess
 
@@ -61,32 +61,32 @@ output_dir_path = StringVar()
 eg_threshold = StringVar()
 
 
-input_path_MS2.set(r"D:\Manuscripts\2023_fractionated_spectral_library\SL_aquisition_data\crustacean\STNS\STNS_F8.ms2")
+#input_path_MS2.set(r"D:\Manuscripts\2023_fractionated_spectral_library\SL_aquisition_data\crustacean\STNS\STNS_F8.ms2")
 #input_path_format_MS2.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\2021_0817_CoG_1.txt")
-mz_range_min.set('50')
-mz_range_max.set('3000')
-min_intensity.set('1000')
-max_precursor_z.set('8')
-max_fragment_z.set('4')
+# mz_range_min.set('50')
+# mz_range_max.set('3000')
+# min_intensity.set('1000')
+# max_precursor_z.set('8')
+# max_fragment_z.set('4')
 # database_csv_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_db_w_decoy.csv")
 # target_peptide_list_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_target_list.csv")
-fasta_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\OG_SL_files\EndoGenius_DDA_search_results\input_files\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
-precursor_err.set('20')
-fragment_err.set('0.02')
-max_mods_pep.set('3')
-amid_var.set(1)
-ox_var.set(1)
-pgE_var.set(1)
-sulf_var.set(1)
-pgQ_var.set(1)
-motif_db_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\OG_SL_files\EndoGenius_DDA_search_results\input_files\NP_motif_db.csv")
-confident_coverage_threshold.set('70')
+#fasta_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\OG_SL_files\EndoGenius_DDA_search_results\input_files\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
+# precursor_err.set('20')
+# fragment_err.set('0.02')
+# max_mods_pep.set('3')
+# amid_var.set(1)
+# ox_var.set(1)
+# pgE_var.set(1)
+# sulf_var.set(1)
+# pgQ_var.set(1)
+#motif_db_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\OG_SL_files\EndoGenius_DDA_search_results\input_files\NP_motif_db.csv")
+# confident_coverage_threshold.set('70')
 standard_err.set('0.1')
 max_adjacent_swapped_AAs.set('2')
 # FDR_threshold.set('20')
 max_swapped_AA.set('1')
-output_dir_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data\STNS_F8")
-eg_threshold.set('1000')
+# output_dir_path.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data\STNS_F8")
+# eg_threshold.set('1000')
 
 def launch_motif_build_gui():
     OUTPUT_PATH = Path(__file__).parent
@@ -103,25 +103,25 @@ def launch_motif_build_gui():
 
     # Initialize StringVar variables before creating Entry widgets
     min_motif_len_in = StringVar()
-    min_motif_len_in.set('3')
+   # min_motif_len_in.set('3')
 
     min_num_motif_inst = StringVar()
-    min_num_motif_inst.set('2')
+    #min_num_motif_inst.set('2')
 
     part_motif_flank = StringVar()
-    part_motif_flank.set('3')
+    #part_motif_flank.set('3')
 
     fasta_path_input = StringVar()
-    fasta_path_input.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\input\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
+   # fasta_path_input.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\input\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
 
     t_val = StringVar()
-    t_val.set('0')
+    #t_val.set('0')
 
     output_dir = StringVar()
-    output_dir.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\output")
+    #output_dir.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\output")
 
     clustal_path = StringVar()
-    clustal_path.set(r"C:\Users\lawashburn\Downloads\clustal-omega-1.2.2\clustal-omega-1.2.2-win64\clustalo.exe")
+    #clustal_path.set(r"C:\Users\lawashburn\Downloads\clustal-omega-1.2.2\clustal-omega-1.2.2-win64\clustalo.exe")
 
     def build_motif_db():
 
@@ -429,7 +429,7 @@ def launch_lib_build_gui():
     
     # eg_results_dir.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data")
     # out_dir.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.0\sl_test2")
-    error.set('0.02')
+    #error.set('0.02')
     
     def in_dir_path_get():
         in_dir_path_out = filedialog.askdirectory() 
@@ -603,12 +603,12 @@ def launch_lib_build_gui():
     lib_window.resizable(True, True)
     lib_window.mainloop()
 
-def launch_diann():
-    try:
-        subprocess.Popen([r'DIA-NN\1.8.1\DIA-NN.exe'])  # Replace with the actual command to launch DIA-NN
-        messagebox.showinfo("Launch", "DIA-NN GUI is launching...")
-    except Exception as e:
-        messagebox.showerror("Error", f"Failed to launch DIA-NN: {e}")
+# def launch_diann():
+#     try:
+#         subprocess.Popen([r'DIA-NN\1.8.1\DIA-NN.exe'])  # Replace with the actual command to launch DIA-NN
+#         messagebox.showinfo("Launch", "DIA-NN GUI is launching...")
+#     except Exception as e:
+#         messagebox.showerror("Error", f"Failed to launch DIA-NN: {e}")
 
 def launch_quant():
 
@@ -1328,7 +1328,7 @@ menubar.add_cascade(label="Help", menu=helpmenu)
 toolmenu = Menu(menubar, tearoff=0)
 toolmenu.add_command(label="Quantiation Report", command = launch_quant)
 toolmenu.add_command(label="Build Spectral Library", command = launch_lib_build_gui)
-toolmenu.add_command(label="Launch DIA-NN GUI", command=launch_diann)
+#toolmenu.add_command(label="Launch DIA-NN GUI", command=launch_diann)
 toolmenu.add_command(label="Launch MotifQuest", command=launch_motif_build_gui)
 menubar.add_cascade(label="Tools", menu=toolmenu)
 
