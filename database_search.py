@@ -22,8 +22,10 @@ from scipy.spatial import distance
 import numpy as np
 from pyopenms import *
 import smtplib
+pd.options.mode.chained_assignment = None
 
 print('Database Search')
+
 
 def raw_file_detail_extraction(raw_file_formatted_path,output_parent_directory):
     backslash_index_1 = raw_file_formatted_path.rfind('\\')
@@ -51,11 +53,8 @@ def raw_file_detail_extraction(raw_file_formatted_path,output_parent_directory):
 
 def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_directory,raw_file_formatted_path,precursor_error_cutoff,
                          fragment_error_cutoff,min_mz,min_intensity,standard_err_percent,amidation,oxidation_M_status,
-                         pyroglu_E_status,pyroglu_Q_status,sulfo_Y_status,max_modifications,sample_output_directory):
-   
+                         pyroglu_E_status,pyroglu_Q_status,sulfo_Y_status,dileu_K_status,phospho_S_status,max_modifications,sample_output_directory):
 
-    # base_file_path = r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files"
-    # output_parent_directory = r"C:\Users\lawashburn\Documents\DB_pep_validation\DB_search_w_mod_20230629"
     if '_formatted.ms2' in choose_mzml_directory:
         mzml_path = choose_mzml_directory.replace('_formatted.ms2','.mzML')
     elif '_formatted.txt' in choose_mzml_directory:
@@ -67,29 +66,10 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
 
     raw_conv_mzml_storage = [[mzml_path,raw_file_formatted_path]]
 
-    # raw_conv_mzml_storage = [[r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_SG_3.mzML",
-    #                           r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_SG_3_formatted.txt"],
-    #                          [r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_TG_1.mzML",
-    #                           r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_TG_1_formatted.txt"],
-    #                          [r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_TG_2.mzML",
-    #                           r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_TG_2_formatted.txt"],
-    #                          [r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_TG_3.mzML",
-    #                           r"C:\Users\lawashburn\Documents\DBpep_v2\validation\Nhu_RAW_files\2021_0817_TG_3_formatted.txt"]]
-    
     h_mass = 1.00784
-    # precursor_error_cutoff = 20 #ppm
-    # fragment_error_cutoff = 0.02
-    # min_mz = 50
-    # min_intensity = 1000
-    # standard_err_percent = 0.1
+
     spectra_segments = 50
-    
-    # amidation = True
-    # oxidation_M_status = True
-    # pyroglu_E_status = True
-    # pyroglu_Q_status = True
-    # sulfo_Y_status = True
-    # max_modifications = 3
+
     
     ### generating database of mods selected ###
     mods = []
@@ -106,13 +86,19 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
     if sulfo_Y_status == 1:
         mods.append('Y(Sulfo)')
         mod_dict['Y'] = 'Y(Sulfo)'
+    if dileu_K_status == 1:
+        mods.append('K(12PlexDiLeu)')
+        mod_dict['K'] = 'K(12PlexDiLeu)'
+    if phospho_S_status == 1:
+        mods.append('S(Phospho)')
+        mod_dict['S'] = 'S(Phospho)'
     else:
         pass
     
     modded_aas = []
     for a in mods:
         modded_aas.append(a[0])
-    
+
     ### Theoretical fragment calculator ###
     proton_mass = 1.00727646688
     charge = 1 #fragment charge
@@ -122,6 +108,11 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
     N = 14.003074
     P = 30.973762
     S = 31.9720707
+    C13 = 13.003355
+    O18 = 17.9991610 
+    N15 = 15.0001
+    H2 = 2.014101777844
+    X = 0
     
     aa_masses = {
         'G' : C*2  + H*3  + N   + O,
@@ -146,19 +137,25 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
         'W' : C*11 + H*10 + N*2 + O ,
         'O' : C*5  + H*12 + N*2 + O*2,
         'C(Pyro-glu)' : C*3  + H * 2 + O + S,
-        'Q(Gln->pyro-Glu)' : C*5  + H*5  + N + O*2,
-        'E(Glu->pyro-Glu)' : C*5  + H*4 + O*3,
+        'Q(Pyro-glu)' : C*5  + H*5  + N + O*2,
+        'E(Pyro-glu)' : C*5  + H*4 + O*3,
         'M(Oxidation)' : C*5  + H*9  + N   + O*2   + S,
-        'Y(Sulfo)' :  C*9  + H*9  + N   + O*5 + S
+        'Y(Sulfo)' :  C*9  + H*9  + N   + O*5 + S,
+        'K(12PlexDiLeu)': H*15 + C*7 + C13*1 + N15*1 + O18*1,
+        'S(Phospho)' : C*3  + H*6  + N   + O*5 + P,
         }
-    
+
+    #%%
     termini = {'Standard' : H * 2 + O,
     '(Amidated)' : N + H * 3}
+    c_termini = {'(12PlexDiLeu)': H*15 + C + C13*1 + N15*1 + O18*1}
     PTMs = {'C(Pyro-glu)' : H * -3 - N,
-            'Q(Gln->pyro-Glu)' : H * -3 - N,
-            'E(Glu->pyro-Glu)' : H * -3 - N,
+            'Q(Pyro-glu)' : H * -3 - N,
+            'E(Pyro-glu)' : H * -3 - N,
             'M(Oxidation)' : O,
-            'Y(Sulfo)' : S + O * 3
+            'Y(Sulfo)' : S + O * 3,
+            'K(12PlexDiLeu)': H*15 + C*7 + C13*1 + N15*1 + O18*1,
+            'S(Phospho)' : C*3  + H*6  + N   + O*5 + P,
             }
     adducts = {
         'H2O' : H * 2 + O,
@@ -196,13 +193,20 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
         p = Param()
         p.setValue("add_metainfo", "true")
         tsg.setParameters(p)
-        peptide = AASequence.fromString(peptide)
-        tsg.getSpectrum(thspec, peptide, 1, 1)
+        
+        peptide = peptide.replace("E(Pyro-glu)",('E[' + str(aa_masses['E(Pyro-glu)']) + ']'))
+        peptide = peptide.replace("K(12PlexDiLeu)",('K[' + str(aa_masses['K(12PlexDiLeu)']) + ']'))
+        peptide = peptide.replace("(12PlexDiLeu)",('[' + str(aa_masses['K(12PlexDiLeu)']) + ']'))
+        peptide = peptide.replace("(Pyro-glu)",('[' + str(aa_masses['Q(Pyro-glu)']) + ']'))
+        peptide = peptide.replace("(Pyro-glu)",('[' + str(aa_masses['E(Pyro-glu)']) + ']'))
+
+        peptide_convert = AASequence.fromString(peptide)
+        tsg.getSpectrum(thspec, peptide_convert, 1, 1)
     
         spectrum_of_interest = e[ss-1]
         mz, i = spectrum_of_interest.get_peaks()
         peaks = [(mz, i) for mz, i in zip(mz, i) if i > min_intensity and mz > min_mz]
-    
+        
         hscore = HyperScore()
         fragment_mass_tolerance = precursor_error_cutoff
         is_tol_in_ppm = True
@@ -263,16 +267,33 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
             for c in range(0,no_mods+1):
                 pep_of_interest = pep_update[-1]
                 if '(' in pep_of_interest:
-                    first_ptm_start = pep_of_interest.index('(')
-                    first_ptm_end = pep_of_interest.index(')')
-    
-                    first_residues = pep_of_interest[:(first_ptm_start-1)]
-                    for a in first_residues:
-                        list_of_res.append(a)
-                    ptm_residue = pep_of_interest[(first_ptm_start-1):(first_ptm_end+1)]
-                    list_of_res.append(ptm_residue)
-                    remaining_pep = pep_of_interest[(first_ptm_end+1):]
-                    pep_update.append(remaining_pep)  
+                    if pep_of_interest.startswith('('):
+                        c_term_last_res = peptide.index(')')
+                        c_term_mod = peptide[:c_term_last_res+1]
+                        list_of_res.append(c_term_mod)
+                        
+                        remaining_pep = peptide[c_term_last_res+1:]
+                        
+                        
+                        first_ptm_start = remaining_pep.index('(')
+                        first_ptm_end = remaining_pep.index(')')
+                        first_residues = remaining_pep[:(first_ptm_start-1)]
+                        for a in first_residues:
+                            list_of_res.append(a)
+                        ptm_residue = remaining_pep[(first_ptm_start-1):(first_ptm_end+1)]
+                        list_of_res.append(ptm_residue)
+                        remaining_pep = remaining_pep[(first_ptm_end+1):]
+                        pep_update.append(remaining_pep)  
+                    else:
+                        first_ptm_start = pep_of_interest.index('(')
+                        first_ptm_end = pep_of_interest.index(')')
+                        first_residues = pep_of_interest[:(first_ptm_start-1)]
+                        for a in first_residues:
+                            list_of_res.append(a)
+                        ptm_residue = pep_of_interest[(first_ptm_start-1):(first_ptm_end+1)]
+                        list_of_res.append(ptm_residue)
+                        remaining_pep = pep_of_interest[(first_ptm_end+1):]
+                        pep_update.append(remaining_pep)  
                 else:
                     for d in pep_of_interest:
                         list_of_res.append(d)
@@ -322,7 +343,17 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
     def theoretical_spectra_generator(peptide_to_check):
         ###pull theoretical masses###
         plain_peptide = re.sub("[\(\[].*?[\)\]]", "",peptide_to_check) #removes any modification for mass calculations
-        res_list_for_fragment = list_of_residues(peptide_to_check)
+        if peptide_to_check.startswith('('):
+            end_c_term = peptide_to_check.index(')')
+            no_c_term_pep = peptide_to_check[end_c_term+1:]
+            c_term_ID = peptide_to_check[:end_c_term+1]
+            res_list_for_fragment_part1 = list_of_residues(no_c_term_pep)
+            res_list_for_fragment = []
+            res_list_for_fragment.append(c_term_ID)
+            res_list_for_fragment.extend(res_list_for_fragment_part1)
+            
+        else:
+            res_list_for_fragment = list_of_residues(peptide_to_check)
         mass_of_residues = []
         for residue in plain_peptide:
             residue_mass = aa_masses[residue]
@@ -342,14 +373,20 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
             
             residue_identity = res_list_for_fragment[a]
             if len(b_ions) == 0:
-                ion_mass = aa_masses[residue_identity]
+                try:
+                    ion_mass = aa_masses[residue_identity]
+                except KeyError:
+                    ion_mass = c_termini[residue_identity]
                 ion_mz = ion_mass + proton_mass
                 b_ions.append(ion_mz)
                 ion_name = 'b' + str(a+1)
                 b_ion_name.append(ion_name)
             
             elif len(b_ions) > 0:
-                ion_mass = (aa_masses[residue_identity]) + b_ions[-1]
+                try:
+                    ion_mass = (aa_masses[residue_identity]) + b_ions[-1]
+                except KeyError:
+                    ion_mass = (c_termini[residue_identity]) + b_ions[-1]
                 b_ions.append(ion_mass)
                 ion_name = 'b' + str(a+1)
                 b_ion_name.append(ion_name)
@@ -357,7 +394,10 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
         for b in (range(0,num_ions)):
             residue_identity = res_list_for_fragment[b]
             if len(y_ions) == 0:
-                ion_mass = mass_to_charge - aa_masses[residue_identity]
+                try:
+                    ion_mass = mass_to_charge - aa_masses[residue_identity]
+                except KeyError:
+                    ion_mass = mass_to_charge - c_termini[residue_identity]
                 y_ions.append(ion_mass)
                 ion_name = 'y' + str((num_ions-b))
                 y_ion_name.append(ion_name)
@@ -523,10 +563,10 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
         for a in range(0,len(precursor_amm_results)):
             candidates_filtered_AMM = precursor_amm_results.iloc[[a]]
             candidate_seq = candidates_filtered_AMM['Sequence'].values[0]
+            
             candidate_scan = candidates_filtered_AMM['Scan'].values[0]
             
             candidates_filtered = all_seqs[all_seqs['Sequence'] == candidate_seq]
-            
             ion_report = theoretical_spectra_generator(candidate_seq)
             
             scan_extract = pd.merge(candidates_filtered,precursor_amm_results,on='Sequence')
@@ -591,12 +631,12 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
                 elif issue_seq2 in peptide_formal:
                     peptide_formal = peptide_formal.replace(issue_seq2,'E(pyroGlu)')
     
-                output_path_rep = peptide_rep_output_folder + '\\' + peptide_formal + '_' + str(scan_to_report) + '_fragment_report.ftr'
-                df.reset_index().to_feather(output_path_rep) 
+                output_path_rep = peptide_rep_output_folder + '\\' + peptide_formal + '_' + str(scan_to_report) + '_fragment_report.csv'
+                # df.reset_index().to_feather(output_path_rep) 
         
-                # with open(output_path_rep,'w',newline='') as filec:
-                #         writerc = csv.writer(filec)
-                #         df.to_csv(filec,index=False)
+                with open(output_path_rep,'w',newline='') as filec:
+                        writerc = csv.writer(filec)
+                        df.to_csv(filec,index=False)
         
         #End fragment AMM
         

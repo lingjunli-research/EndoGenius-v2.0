@@ -110,20 +110,20 @@ def results_metric_extract_start(results_directory,output_directory,sample_outpu
                 q_pyroglu.append(1)
                 e_pyroglu.append(0)
                 updated_seq = sequence.replace('Q(Gln->pyro-Glu)','Q(pyroGlu)')
-                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + updated_seq + '_' + str(scan) + '_fragment_report.ftr'
+                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + updated_seq + '_' + str(scan) + '_fragment_report.csv'
                 
             elif 'E(Glu->pyro-Glu)' in sequence:
                 e_pyroglu.append(1)
                 q_pyroglu.append(0)
                 updated_seq = sequence.replace('E(Glu->pyro-Glu)','E(pyroGlu)')
-                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + updated_seq + '_' + str(scan) + '_fragment_report.ftr'
+                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + updated_seq + '_' + str(scan) + '_fragment_report.csv'
             
             else:
-                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + sequence + '_' + str(scan) + '_fragment_report.ftr'
+                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + sequence + '_' + str(scan) + '_fragment_report.csv'
                 e_pyroglu.append(0)
                 q_pyroglu.append(0)
             
-            fragment_report = pd.read_feather(fragment_report_path)
+            fragment_report = pd.read_csv(fragment_report_path)
             fragment_report['Fragment error (Da)'] = fragment_report['Fragment error (Da)'].abs()
             fragment_err_mean = fragment_report['Fragment error (Da)'].mean()
             avg_fragment_err_storage.append(fragment_err_mean)

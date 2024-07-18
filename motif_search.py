@@ -62,8 +62,8 @@ def start_motif_search(psm_assignments_path_parent_directory,motif_database_path
                         sequence_modded_formatted = sequence_modded.replace('(Gln->pyro-Glu)','(pyroGlu)')
                         sequence_modded_formatted = sequence_modded_formatted.replace('(Glu->pyro-Glu)','(pyroGlu)')
                         
-                        exp_ions_path = fragment_match_directory + '\\' + sequence_modded_formatted + '_' + str(int(scan)) + '_fragment_report.ftr'
-                        exp_ions = pd.read_feather(exp_ions_path)
+                        exp_ions_path = fragment_match_directory + '\\' + sequence_modded_formatted + '_' + str(int(scan)) + '_fragment_report.csv'
+                        exp_ions = pd.read_csv(exp_ions_path)
                         
                         theo_ion_list = b_ion_list + y_ion_list
     
