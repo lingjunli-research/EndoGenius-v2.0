@@ -12,6 +12,13 @@ import pathlib
 # MS2_path = r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\fasta_raw\short_2021_0817_CoG_1.ms2"
 # output_directory = r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.0.9\v02_MS2_format_test"
 def format_raw_MS2(MS2_path,output_directory):
+    
+    def remove_lines_starting_with_Z(input_file, output_file):
+        with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+            for line in infile:
+                if not line.startswith('Z'):
+                    outfile.write(line)
+                
     backslash_index1 = MS2_path.rfind('\\')
     backslash_index2 = MS2_path.rfind('/')
     
@@ -136,13 +143,18 @@ def format_raw_MS2(MS2_path,output_directory):
         element.append(precursor_scan_list[precursor_scan_index])
         element.append(precursor_int_list[precursor_intensity_index])
         final_lst.append(element)
-    out_name = output_directory + '\\'+tissue_type+'_formatted.txt'
+    out_name = output_directory + '\\'+tissue_type+'_formatted_draft.txt'
 
     with open(out_name,'w') as output:
         for i in final_lst:
             for j in i:
                 output.write(str(j + ','))
             output.write('\n')
-    return out_name
+    
+    input_file = out_name  # Replace with your input file path
+    output_file = output_directory + '\\'+tissue_type+'_formatted.txt'  # Replace with your desired output file path
+    remove_lines_starting_with_Z(input_file, output_file)
+    
+    return output_file
 
 # format_raw_MS2(MS2_path,output_directory)

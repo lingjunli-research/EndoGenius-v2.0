@@ -302,8 +302,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                                     seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                                     seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                                     
-                                                    fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                                    fragment_report = pd.read_feather(fragment_report_path)
+                                                    fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                                    fragment_report = pd.read_csv(fragment_report_path)
                                                     fragment_report = fragment_report[fragment_report['Fragment error (Da)'] >= fragment_error_threshold]
                                                     
                                                     
@@ -363,8 +363,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                         seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                         seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                         
-                                        fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                        fragment_report = pd.read_feather(fragment_report_path)
+                                        fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                        fragment_report = pd.read_csv(fragment_report_path)
                                         fragment_report = fragment_report[fragment_report['Fragment error (Da)'] >= fragment_error_threshold]
                                         
                                         
@@ -554,8 +554,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                 seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                 seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                 
-                                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                fragment_report = pd.read_feather(fragment_report_path)
+                                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                fragment_report = pd.read_csv(fragment_report_path)
                                 fragment_report = fragment_report[fragment_report['Fragment error (Da)'] >= fragment_error_threshold]
                                 
                                 
@@ -600,8 +600,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                 seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                 scan = row_OI['Scan'].values[0]
                                 
-                                peptide_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan) + '_fragment_report.ftr'         
-                                peptide_report = pd.read_feather(peptide_report_path)
+                                peptide_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan) + '_fragment_report.csv'         
+                                peptide_report = pd.read_csv(peptide_report_path)
                                 
                                 peptide_report = peptide_report[peptide_report['Fragment error (Da)'] <= fragment_error_threshold]
                                 if len(peptide_report)>0:
@@ -666,8 +666,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                                     seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                                     seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                                     
-                                                    fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                                    fragment_report = pd.read_feather(fragment_report_path)
+                                                    fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                                    fragment_report = pd.read_csv(fragment_report_path)
                                                     prelim_value_AEIO = fragment_report['Fragment error (Da)'].min()
                                                     
                                                     scan_store.append(scan_oi)
@@ -723,8 +723,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                                             seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                                             seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                                             
-                                                            fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                                            fragment_report = pd.read_feather(fragment_report_path)
+                                                            fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                                            fragment_report = pd.read_csv(fragment_report_path)
                                                             prelim_value_AEILNO = fragment_report['Fragment error (Da)'].min()
                                                             
                                                             scan_store.append(scan_oi)
@@ -763,8 +763,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                                         seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                                         seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                                         
-                                                        fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                                        fragment_report = pd.read_feather(fragment_report_path)
+                                                        fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                                        fragment_report = pd.read_csv(fragment_report_path)
                                                         prelim_value_AEIO = fragment_report['Fragment error (Da)'].min()
                                                         
                                                         scan_store.append(scan_oi)
@@ -832,8 +832,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                                 seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                                 seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                                 
-                                                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                                fragment_report = pd.read_feather(fragment_report_path)
+                                                fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                                fragment_report = pd.read_csv(fragment_report_path)
                                                 prelim_value_AEIO = fragment_report['Fragment error (Da)'].min()
                                                 
                                                 scan_store.append(scan_oi)
@@ -872,8 +872,8 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
                                             seq_mod = seq_mod.replace('(Glu->pyro-Glu)','(pyroGlu)')
                                             seq_mod = seq_mod.replace('(Gln->pyro-Glu)','(pyroGlu)')
                                             
-                                            fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.ftr'
-                                            fragment_report = pd.read_feather(fragment_report_path)
+                                            fragment_report_path = sample_output_directory + '\\fragment_matches\\' + seq_mod + '_' + str(scan_oi) + '_fragment_report.csv'
+                                            fragment_report = pd.read_csv(fragment_report_path)
                                             prelim_value_AEIO = fragment_report['Fragment error (Da)'].min()
                                             
                                             scan_store.append(scan_oi)

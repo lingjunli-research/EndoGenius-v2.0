@@ -1,16 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
+
 import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 
 a = Analysis(
     ['GUI.py'],
     pathex=[],
-    binaries=[],
+    binaries=[(r'C:\Users\lawashburn\Documents\EndoGeniusDistributions\EndoGenius_v1.1.0\DIA-NN\1.8.1\DIA-NN.exe', '.')],
     datas=[("venv/Lib/site-packages/pyopenms", "./pyopenms/"),('Endogenius_Thumbnail.ico', '.'),('assets', 'assets')],
-    hiddenimports=[],
-    hookspath=['C:\\Users\\lawashburn\\Documents\\EndoGeniusDistributions\\EndoGenius_v1.0.2\\hooks'],
+    hiddenimports=['pkg_resources.py2_warn', 'pkg_resources.extern'],
+    hookspath=['C:\\Users\\lawashburn\\Documents\\EndoGeniusDistributions\\EndoGenius_v1.1.0\\hooks'],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['jupyter', 'notebook'],
     noarchive=False,
 )
 pyz = PYZ(a.pure)
@@ -34,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['EndoGenius.ico'],
+    icon=['EndoGenius_Thumbnail.ico'],
 )
