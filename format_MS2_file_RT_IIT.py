@@ -9,8 +9,8 @@ import csv
 import pandas as pd
 import os
 import pathlib
-# MS2_path = r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\fasta_raw\short_2021_0817_CoG_1.ms2"
-# output_directory = r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.0.9\v02_MS2_format_test"
+MS2_path = r"D:\Manuscripts\2024_12plexNP_DiLeu\20240718_480_DiLeu\Mitch_Polyamine_TR3.ms2"
+output_directory = r"D:\Manuscripts\2024_12plexNP_DiLeu\20240718_480_DiLeu"
 def format_raw_MS2(MS2_path,output_directory):
     
     def remove_lines_starting_with_Z(input_file, output_file):
@@ -157,4 +157,4 @@ def format_raw_MS2(MS2_path,output_directory):
     
     return output_file
 
-# format_raw_MS2(MS2_path,output_directory)
+format_raw_MS2(MS2_path,output_directory)

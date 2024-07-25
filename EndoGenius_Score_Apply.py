@@ -12,8 +12,8 @@ import smtplib
 
 print('Target-Decoy Assess')
 
-def target_decoy_apply(dsd_summary_results,target_results,output_directory,fdr_cutoff,sample_output_directory,raw_file_formatted_path):
-
+def endogenius_apply(dsd_summary_results,target_results,output_directory,eg_cutoff,sample_output_directory,raw_file_formatted_path):
+    fdr_cutoff = 0.1
     number_runs = 1
     check_iterations = 5
     
@@ -38,7 +38,7 @@ def target_decoy_apply(dsd_summary_results,target_results,output_directory,fdr_c
     target_list_str = target_IDS['Sequence'].values.tolist()
     
     dsd_summary_results['Unmodified sequence'] = dsd_summary_results['Peptide']
-    dsd_summary_results['Unmodified sequence'] = dsd_summary_results['Unmodified sequence'].str.replace(r'\s*\(.*?\)\s*', '', regex=True)
+    dsd_summary_results['Unmodified sequence'] = dsd_summary_results['Unmodified sequence'].str.replace(r"\([^)]*\)","")
     dsd_summary_results['Status'] = dsd_summary_results['Unmodified sequence'].apply(lambda x: any([k in x for k in target_list_str]))
 
     samples_df = dsd_summary_results.drop_duplicates(subset='Sample')
@@ -190,6 +190,13 @@ def target_decoy_apply(dsd_summary_results,target_results,output_directory,fdr_c
                 with open(file_path,'w',newline='') as filec:
                         writerc = csv.writer(filec)
                         target_results_final.to_csv(filec,index=False)
+                
+                target_results_eg_filtered = target_results[target_results['Final score, run: ' + str(a)] >= eg_cutoff]
+                
+                file_path = sample_output_directory + '\\final_results_EG_score.csv'
+                with open(file_path,'w',newline='') as filec:
+                        writerc = csv.writer(filec)
+                        target_results_eg_filtered.to_csv(filec,index=False)
             
         dsd_merge_table = pd.DataFrame()
         dsd_merge_table['Run #'] = run_log
