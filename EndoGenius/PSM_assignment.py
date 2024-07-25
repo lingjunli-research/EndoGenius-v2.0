@@ -972,13 +972,3 @@ def PSM_assignment_execute(standard_err_percent,confident_seq_cov,max_adjacent_s
         ('\nFDR @ PSM level: ' + str((len(psm_total_decoy)/len(psm_total_target))))]
         file1.writelines(L)
         file1.close()
-    
-    subject = 'Your code has finished running'
-    text = 'PSM assignment for all samples has finished running'
-    content = 'Subject: %s\n\n%s' % (subject, text)
-    mail = smtplib.SMTP('smtp.gmail.com',587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-    mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-    mail.close()

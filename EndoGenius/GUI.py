@@ -7,8 +7,6 @@ from pathlib import Path
 from tkinter.filedialog import askopenfilename
 from tkinter import filedialog
 import pymsgbox
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Checkbutton, messagebox
 from tkinter import *
 from Bio.SeqIO.FastaIO import SimpleFastaParser
@@ -16,7 +14,7 @@ import pandas as pd
 import csv
 import webbrowser
 import os
-#from tkinter.tix import *
+
 
 import subprocess
 
@@ -25,12 +23,11 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
-
 window = Tk()
 
 window.geometry("778x870")
 window.configure(bg = "#423C56")
-window.title('EndoGenius v1.1.4')
+window.title('EndoGenius v2.0.0')
 
 input_path_MS2 = StringVar()
 input_path_format_MS2 = StringVar()
@@ -47,8 +44,6 @@ fragment_err = StringVar()
 max_mods_pep = StringVar()
 min_motif_len = StringVar()
 min_motif_len.set('3')
-
-
 amid_var = IntVar()
 ox_var = IntVar()
 pgE_var = IntVar()
@@ -78,7 +73,7 @@ max_precursor_z.set('8')
 max_fragment_z.set('4')
 # # database_csv_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_db_w_decoy.csv")
 # # target_peptide_list_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\db_formatted\short_target_list.csv")
-fasta_path.set(r"C:\Users\lawashburn\Desktop\ALC50_Mass_Search_Files\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
+fasta_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_input\dileu_unittests\even_shorter_dileu_fasta.fasta")
 precursor_err.set('20')
 fragment_err.set('0.02')
 max_mods_pep.set('5')
@@ -96,327 +91,304 @@ standard_err.set('0.1') ###KEEP
 max_adjacent_swapped_AAs.set('2') ###KEEP
 FDR_threshold.set('5')
 max_swapped_AA.set('1') ###KEEP
-output_dir_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.4\compare_bw_versions_full_db\1.1.4_v04")
+output_dir_path.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v2.0.0")
 # #eg_threshold.set('1000')
 
-# def reporter_ion_extraction_begin():
-#     extract_window = Toplevel(window)
-#     extract_window.geometry("750x670")
-#     extract_window.configure(bg = "#423C56")
-#     extract_window.attributes("-topmost", True)
-#     extract_window.title('Reporter Ion Extraction')
+def reporter_ion_extraction_begin():
+    extract_window = Toplevel(window)
+    extract_window.geometry("750x670")
+    extract_window.configure(bg = "#423C56")
+    extract_window.attributes("-topmost", True)
+    extract_window.title('Reporter Ion Extraction')
     
-#     exportdirectorypath = StringVar()
-#     importdirectorypath = StringVar()
-#     importspectrapath = StringVar()
-#     errorthreshold = StringVar()
+    exportdirectorypath = StringVar()
+    importdirectorypath = StringVar()
+    importspectrapath = StringVar()
+    errorthreshold = StringVar()
+
+    twelveplex_1_name_entry = StringVar()
+    twelveplex_2_name_entry = StringVar()
+    twelveplex_3_name_entry = StringVar()
+    twelveplex_4_name_entry = StringVar()
+    twelveplex_5_name_entry = StringVar()
+    twelveplex_6_name_entry = StringVar()
+    twelveplex_7_name_entry = StringVar()
+    twelveplex_8_name_entry = StringVar()
+    twelveplex_9_name_entry = StringVar()
+    twelveplex_10_name_entry = StringVar()
+    twelveplex_11_name_entry = StringVar()
+    twelveplex_12_name_entry = StringVar()
     
-#     # exportdirectorypath.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.4")
-#     # importdirectorypath.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.2\v10\20240523_DiLeu_TR1_240523184202_5mod_5FDR\20240523_DiLeu_TR1_240523184202\final_results__target.csv")
-#     # importspectrapath.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.2\v10\20240523_DiLeu_TR1_240523184202_5mod_5FDR\20240523_DiLeu_TR1_240523184202_formatted.txt")
-#     # errorthreshold.set(20)
+    twelveplex_1_mass_entry = StringVar()
+    twelveplex_2_mass_entry = StringVar()
+    twelveplex_3_mass_entry = StringVar()
+    twelveplex_4_mass_entry = StringVar()
+    twelveplex_5_mass_entry = StringVar()
+    twelveplex_6_mass_entry = StringVar()
+    twelveplex_7_mass_entry = StringVar()
+    twelveplex_8_mass_entry = StringVar()
+    twelveplex_9_mass_entry = StringVar()
+    twelveplex_10_mass_entry = StringVar()
+    twelveplex_11_mass_entry = StringVar()
+    twelveplex_12_mass_entry = StringVar()
     
-#     twelveplex_1_name_entry = StringVar()
-#     twelveplex_2_name_entry = StringVar()
-#     twelveplex_3_name_entry = StringVar()
-#     twelveplex_4_name_entry = StringVar()
-#     twelveplex_5_name_entry = StringVar()
-#     twelveplex_6_name_entry = StringVar()
-#     twelveplex_7_name_entry = StringVar()
-#     twelveplex_8_name_entry = StringVar()
-#     twelveplex_9_name_entry = StringVar()
-#     twelveplex_10_name_entry = StringVar()
-#     twelveplex_11_name_entry = StringVar()
-#     twelveplex_12_name_entry = StringVar()
+    twelveplex_1_name_entry.set('115a')
+    twelveplex_2_name_entry.set('115b')
+    twelveplex_3_name_entry.set('116a')
+    twelveplex_4_name_entry.set('116b')
+    twelveplex_5_name_entry.set('116c')
+    twelveplex_6_name_entry.set('117a')
+    twelveplex_7_name_entry.set('117b')
+    twelveplex_8_name_entry.set('117c')
+    twelveplex_9_name_entry.set('118a')
+    twelveplex_10_name_entry.set('118b')
+    twelveplex_11_name_entry.set('118c')
+    twelveplex_12_name_entry.set('118d')
     
-#     twelveplex_1_mass_entry = StringVar()
-#     twelveplex_2_mass_entry = StringVar()
-#     twelveplex_3_mass_entry = StringVar()
-#     twelveplex_4_mass_entry = StringVar()
-#     twelveplex_5_mass_entry = StringVar()
-#     twelveplex_6_mass_entry = StringVar()
-#     twelveplex_7_mass_entry = StringVar()
-#     twelveplex_8_mass_entry = StringVar()
-#     twelveplex_9_mass_entry = StringVar()
-#     twelveplex_10_mass_entry = StringVar()
-#     twelveplex_11_mass_entry = StringVar()
-#     twelveplex_12_mass_entry = StringVar()
+    twelveplex_1_mass_entry.set('115.12476')
+    twelveplex_2_mass_entry.set('115.13108')
+    twelveplex_3_mass_entry.set('116.12812')
+    twelveplex_4_mass_entry.set('116.13444')
+    twelveplex_5_mass_entry.set('116.14028')
+    twelveplex_6_mass_entry.set('117.13147')
+    twelveplex_7_mass_entry.set('117.13731')
+    twelveplex_8_mass_entry.set('117.14363')
+    twelveplex_9_mass_entry.set('118.13483')
+    twelveplex_10_mass_entry.set('118.14067')
+    twelveplex_11_mass_entry.set('118.14699')
+    twelveplex_12_mass_entry.set('118.15283')
     
-#     twelveplex_1_name_entry.set('115a')
-#     twelveplex_2_name_entry.set('115b')
-#     twelveplex_3_name_entry.set('116a')
-#     twelveplex_4_name_entry.set('116b')
-#     twelveplex_5_name_entry.set('116c')
-#     twelveplex_6_name_entry.set('117a')
-#     twelveplex_7_name_entry.set('117b')
-#     twelveplex_8_name_entry.set('117c')
-#     twelveplex_9_name_entry.set('118a')
-#     twelveplex_10_name_entry.set('118b')
-#     twelveplex_11_name_entry.set('118c')
-#     twelveplex_12_name_entry.set('118d')
-    
-#     twelveplex_1_mass_entry.set('115.12476')
-#     twelveplex_2_mass_entry.set('115.13108')
-#     twelveplex_3_mass_entry.set('116.12812')
-#     twelveplex_4_mass_entry.set('116.13444')
-#     twelveplex_5_mass_entry.set('116.14028')
-#     twelveplex_6_mass_entry.set('117.13147')
-#     twelveplex_7_mass_entry.set('117.13731')
-#     twelveplex_8_mass_entry.set('117.14363')
-#     twelveplex_9_mass_entry.set('118.13483')
-#     twelveplex_10_mass_entry.set('118.14067')
-#     twelveplex_11_mass_entry.set('118.14699')
-#     twelveplex_12_mass_entry.set('118.15283')
-    
-#     canvas = Canvas(extract_window,bg = "#423C56",height = 800,width = 729,bd = 0,highlightthickness = 0,relief = "ridge")
+    canvas = Canvas(extract_window,bg = "#423C56",height = 800,width = 729,bd = 0,highlightthickness = 0,relief = "ridge")
         
-#     canvas.place(x = 0, y = 0)
-#     canvas.create_text(19.0,9.0,anchor="nw",text="Reporter Ion Extraction",fill="#FFFFFF",font=("Inter", 64 * -1))
+    canvas.place(x = 0, y = 0)
+    canvas.create_text(19.0,9.0,anchor="nw",text="Reporter Ion Extraction",fill="#FFFFFF",font=("Inter", 64 * -1))
     
-#     x=19
-#     y=90
-#     width= 700
-#     height = 550
+    x=19
+    y=90
+    width= 700
+    height = 550
     
-#     canvas.create_rectangle(x, y, x+width, y+height,fill="#D9D9D9",outline="")
+    canvas.create_rectangle(x, y, x+width, y+height,fill="#D9D9D9",outline="")
     
-#     def eg_results_path():
-#         eg_results_path_csv = askopenfilename(filetypes=[("CSV Files",("*.csv"))]) 
-#         importdirectorypath.set(eg_results_path_csv)
+    def eg_results_path():
+        eg_results_path_csv = askopenfilename(filetypes=[("CSV Files",("*.csv"))]) 
+        importdirectorypath.set(eg_results_path_csv)
     
-#     def eg_results_spectra_path():
-#         eg_results_path_txt = askopenfilename(filetypes=[("Text Files",("*.txt"))]) 
-#         importspectrapath.set(eg_results_path_txt)
+    def eg_results_spectra_path():
+        eg_results_path_txt = askopenfilename(filetypes=[("Text Files",("*.txt"))]) 
+        importspectrapath.set(eg_results_path_txt)
         
-#     def export_folder():
-#         filename = filedialog.askdirectory()
-#         exportdirectorypath.set(filename)
+    def export_folder():
+        filename = filedialog.askdirectory()
+        exportdirectorypath.set(filename)
     
-#     def begin_reporter_ion_extraction():
-#         tag_name_list = []
-#         tag_mass_list = []
+    def begin_reporter_ion_extraction():
+        tag_name_list = []
+        tag_mass_list = []
         
-#         output_path = exportdirectorypath.get()
-#         results_path = importdirectorypath.get()
-#         spectra_path = importspectrapath.get()
-#         fragment_error_threshold = float(errorthreshold.get())
+        output_path = exportdirectorypath.get()
+        results_path = importdirectorypath.get()
+        spectra_path = importspectrapath.get()
+        fragment_error_threshold = float(errorthreshold.get())
         
-#         mass_h = 1.00784
+        mass_h = 1.00784
         
-#         tag_name_list.append(twelveplex_1_name_entry.get())
-#         tag_name_list.append(twelveplex_2_name_entry.get())
-#         tag_name_list.append(twelveplex_3_name_entry.get())
-#         tag_name_list.append(twelveplex_4_name_entry.get())
-#         tag_name_list.append(twelveplex_5_name_entry.get())
-#         tag_name_list.append(twelveplex_6_name_entry.get())
-#         tag_name_list.append(twelveplex_7_name_entry.get())
-#         tag_name_list.append(twelveplex_8_name_entry.get())
-#         tag_name_list.append(twelveplex_9_name_entry.get())
-#         tag_name_list.append(twelveplex_10_name_entry.get())
-#         tag_name_list.append(twelveplex_11_name_entry.get())
-#         tag_name_list.append(twelveplex_12_name_entry.get())
-#         ##Retrieve plex masses
-#         tag_mass_list.append(float(twelveplex_1_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_2_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_3_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_4_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_5_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_6_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_7_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_8_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_9_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_10_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_11_mass_entry.get()))
-#         tag_mass_list.append(float(twelveplex_12_mass_entry.get()))
+        tag_name_list.append(twelveplex_1_name_entry.get())
+        tag_name_list.append(twelveplex_2_name_entry.get())
+        tag_name_list.append(twelveplex_3_name_entry.get())
+        tag_name_list.append(twelveplex_4_name_entry.get())
+        tag_name_list.append(twelveplex_5_name_entry.get())
+        tag_name_list.append(twelveplex_6_name_entry.get())
+        tag_name_list.append(twelveplex_7_name_entry.get())
+        tag_name_list.append(twelveplex_8_name_entry.get())
+        tag_name_list.append(twelveplex_9_name_entry.get())
+        tag_name_list.append(twelveplex_10_name_entry.get())
+        tag_name_list.append(twelveplex_11_name_entry.get())
+        tag_name_list.append(twelveplex_12_name_entry.get())
+        ##Retrieve plex masses
+        tag_mass_list.append(float(twelveplex_1_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_2_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_3_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_4_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_5_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_6_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_7_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_8_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_9_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_10_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_11_mass_entry.get()))
+        tag_mass_list.append(float(twelveplex_12_mass_entry.get()))
         
-#         spectra = pd.read_csv(spectra_path, sep=",",skiprows=[0], names= ['fragment_mz',
-#                                                                                       'fragment_intensity',
-#                                                                                       'fragment_z',
-#                                                                                       'fragment_resolution',
-#                                                                                       'precursor_mz',
-#                                                                                       'ms2_scan',
-#                                                                                       'precursor_z',
-#                                                                                       'precursor_RT',
-#                                                                                       'IonInjectTime',
-#                                                                                       'ms1_scan',
-#                                                                                       'precursor_intensity',
-#                                                                                       'null'])
+        spectra = pd.read_csv(spectra_path, sep=",",skiprows=[0], names= ['fragment_mz','fragment_z','fragment_resolution','precursor_mz','ms2_scan',
+                                                                          'precursor_z','precursor_RT','IonInjectTime','ms1_scan','precursor_intensity','null'])
     
-#         spectra['fragment_z'] = spectra['fragment_z'].replace(0, 1)
-#         spectra['fragment_monoisotopic_mass'] = (spectra['fragment_mz'] * spectra['fragment_z']) - (mass_h * spectra['fragment_z'])
+        spectra['fragment_z'] = spectra['fragment_z'].replace(0, 1)
+        spectra['fragment_monoisotopic_mass'] = (spectra['fragment_mz'] * spectra['fragment_z']) - (mass_h * spectra['fragment_z'])
     
-#         results = pd.read_csv(results_path)
+        results = pd.read_csv(results_path)
         
-#         spectra_w_details = pd.DataFrame()
+        spectra_w_details = pd.DataFrame()
     
-#         peptide_name_log = []
-#         tag_name_log = []
-#         tag_intensity_log = []
-#         scan_log = []
-#         fragment_mz_log = []
+        peptide_name_log = []
+        tag_name_log = []
+        tag_intensity_log = []
+        scan_log = []
+        fragment_mz_log = []
     
-#         for y in tag_mass_list:
-#             y_monoisotopic = (y*1) - (mass_h*1)
-#             spectra[str(y) + ' error'] = ((abs(spectra['fragment_monoisotopic_mass'] - y_monoisotopic))/y_monoisotopic)*1E6
-#             spectra_w_details = spectra
+        for y in tag_mass_list:
+            y_monoisotopic = (y*1) - (mass_h*1)
+            spectra[str(y) + ' error'] = ((abs(spectra['fragment_monoisotopic_mass'] - y_monoisotopic))/y_monoisotopic)*1E6
+            spectra_w_details = spectra
     
-#         for a in range(0,len(results)):
-#             peptide_id = results['Peptide'].iloc[a]
-#             if '(12PlexDiLeu)' in peptide_id:
-#                 scan_id = results['Scan'].iloc[a]
+        for a in range(0,len(results)):
+            peptide_id = results['Peptide'].iloc[a]
+            if '(12PlexDiLeu)' in peptide_id:
+                scan_id = results['Scan'].iloc[a]
     
-#                 spectra_filtered = spectra_w_details[spectra_w_details['ms2_scan'] == scan_id]
+                spectra_filtered = spectra_w_details[spectra_w_details['ms2_scan'] == scan_id]
                 
-#                 for k in range(0,len(tag_name_list)):
-#                     tag_name_selected = tag_name_list[k]
-#                     tag_mass_selected = tag_mass_list[k]
+                for k in range(0,len(tag_name_list)):
+                    tag_name_selected = tag_name_list[k]
+                    tag_mass_selected = tag_mass_list[k]
                     
-#                     if( spectra_filtered[str(tag_mass_selected) + ' error'].min()) <= fragment_error_threshold:
-#                         spectra_filtered_tag = spectra_filtered[spectra_filtered[str(tag_mass_selected) + ' error'] <= fragment_error_threshold]
-#                         tag_intensity_log.append(spectra_filtered_tag['fragment_intensity'].max())
-#                         tag_name_log.append(tag_name_selected)
-#                         peptide_name_log.append(peptide_id)
-#                         scan_log.append(scan_id)
+                    if( spectra_filtered[str(tag_mass_selected) + ' error'].min()) <= fragment_error_threshold:
+                        spectra_filtered_tag = spectra_filtered[spectra_filtered[str(tag_mass_selected) + ' error'] <= fragment_error_threshold]
+                        tag_intensity_log.append(spectra_filtered_tag['fragment_intensity'].max())
+                        tag_name_log.append(tag_name_selected)
+                        peptide_name_log.append(peptide_id)
+                        scan_log.append(scan_id)
                         
-#                         filter_filter_df = spectra_filtered_tag[spectra_filtered_tag['fragment_intensity'] == (spectra_filtered_tag['fragment_intensity'].max())]
-#                         fragment_mz_log.append(filter_filter_df['fragment_mz'].iloc[0])
+                        filter_filter_df = spectra_filtered_tag[spectra_filtered_tag['fragment_intensity'] == (spectra_filtered_tag['fragment_intensity'].max())]
+                        fragment_mz_log.append(filter_filter_df['fragment_mz'].iloc[0])
                         
-#                     else:
-#                         tag_intensity_log.append(0)
-#                         tag_name_log.append(tag_name_selected)
-#                         peptide_name_log.append(peptide_id)
-#                         scan_log.append(scan_id)
-#                         fragment_mz_log.append(0)
+                    else:
+                        tag_intensity_log.append(0)
+                        tag_name_log.append(tag_name_selected)
+                        peptide_name_log.append(peptide_id)
+                        scan_log.append(scan_id)
+                        fragment_mz_log.append(0)
                 
-#         report_ion_intensity_df = pd.DataFrame()
-#         report_ion_intensity_df['Peptide'] = peptide_name_log
-#         report_ion_intensity_df['Scan'] = scan_log
-#         report_ion_intensity_df['Tag'] = tag_name_log
-#         report_ion_intensity_df['Intensity'] = tag_intensity_log
-#         report_ion_intensity_df['Fragment_mz'] = fragment_mz_log
-    
-#         # Pivot the table without hardcoding the values in the 'Tag' column
-#         pivot_df = report_ion_intensity_df.pivot_table(index=['Peptide', 'Scan'], columns='Tag', values='Intensity').reset_index()
-    
-#         # Flatten the MultiIndex columns
-#         pivot_df.columns.name = None
-#         pivot_df.columns = ['Peptide', 'Scan'] + [f'Intensity_{tag}' for tag in pivot_df.columns[2:]]
-    
-    
-#         output_path_rep = output_path + '\\reporter_ions_extracted.csv'
-#         # df.reset_index().to_feather(output_path_rep) 
-    
-#         with open(output_path_rep,'w',newline='') as filec:
-#                 writerc = csv.writer(filec)
-#                 pivot_df.to_csv(filec,index=False)       
+        report_ion_intensity_df = pd.DataFrame()
+        report_ion_intensity_df['Peptide'] = peptide_name_log
+        report_ion_intensity_df['Scan'] = scan_log
+        report_ion_intensity_df['Tag'] = tag_name_log
+        report_ion_intensity_df['Intensity'] = tag_intensity_log
+        report_ion_intensity_df['Fragment_mz'] = fragment_mz_log
+        pivot_df = report_ion_intensity_df.pivot_table(index=['Peptide', 'Scan'], columns='Tag', values='Intensity').reset_index()
+        pivot_df.columns.name = None
+        pivot_df.columns = ['Peptide', 'Scan'] + [f'Intensity_{tag}' for tag in pivot_df.columns[2:]]  
+        output_path_rep = output_path + '\\reporter_ions_extracted.csv'
+        with open(output_path_rep,'w',newline='') as filec:
+                writerc = csv.writer(filec)
+                pivot_df.to_csv(filec,index=False)       
         
-#         messagebox.showinfo("Process Complete", "Reporter ions have been extracted.")
+        messagebox.showinfo("Process Complete", "Reporter ions have been extracted.")
         
-#     canvas.create_text(26.0,100.0,anchor="nw",text="EndoGenius Results Path: ",fill="#000000",font=("Inter", 16 * -1))
-#     eg_results_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=importdirectorypath)
-#     eg_results_entry.place(x=274.0,y=100.0,width=340.0,height=28.0)
-#     eg_results_button_1 = Button(canvas,text='Browse',borderwidth=0,highlightthickness=0,relief="flat",command=eg_results_path)
-#     eg_results_button_1.place(x=625.0,y=100.0,width=77.21710205078125,height=30.0)
+    canvas.create_text(26.0,100.0,anchor="nw",text="EndoGenius Results Path: ",fill="#000000",font=("Inter", 16 * -1))
+    eg_results_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=importdirectorypath)
+    eg_results_entry.place(x=274.0,y=100.0,width=340.0,height=28.0)
+    eg_results_button_1 = Button(canvas,text='Browse',borderwidth=0,highlightthickness=0,relief="flat",command=eg_results_path)
+    eg_results_button_1.place(x=625.0,y=100.0,width=77.21710205078125,height=30.0)
     
-#     canvas.create_text(110.0,150.0,anchor="nw",text="Spectra Path: ",fill="#000000",font=("Inter", 16 * -1))
-#     eg_spectra_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=importspectrapath)
-#     eg_spectra_entry.place(x=274.0,y=150.0,width=340.0,height=28.0)
-#     eg_spectra_button_1 = Button(canvas,text='Browse',borderwidth=0,highlightthickness=0,relief="flat",command=eg_results_spectra_path)
-#     eg_spectra_button_1.place(x=625.0,y=150.0,width=77.21710205078125,height=30.0)
+    canvas.create_text(110.0,150.0,anchor="nw",text="Spectra Path: ",fill="#000000",font=("Inter", 16 * -1))
+    eg_spectra_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=importspectrapath)
+    eg_spectra_entry.place(x=274.0,y=150.0,width=340.0,height=28.0)
+    eg_spectra_button_1 = Button(canvas,text='Browse',borderwidth=0,highlightthickness=0,relief="flat",command=eg_results_spectra_path)
+    eg_spectra_button_1.place(x=625.0,y=150.0,width=77.21710205078125,height=30.0)
     
-#     canvas.create_text(115.0,205.0,anchor="nw",text="Export Directory: ",fill="#000000",font=("Inter", 16 * -1))
-#     eg_export_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=exportdirectorypath)
-#     eg_export_entry.place(x=274.0,y=200.0,width=340.0,height=28.0)
-#     eg_export_button_1 = Button(canvas,text='Browse',borderwidth=0,highlightthickness=0,relief="flat",command=export_folder)
-#     eg_export_button_1.place(x=625.0,y=200.0,width=77.21710205078125,height=30.0)
+    canvas.create_text(115.0,205.0,anchor="nw",text="Export Directory: ",fill="#000000",font=("Inter", 16 * -1))
+    eg_export_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=exportdirectorypath)
+    eg_export_entry.place(x=274.0,y=200.0,width=340.0,height=28.0)
+    eg_export_button_1 = Button(canvas,text='Browse',borderwidth=0,highlightthickness=0,relief="flat",command=export_folder)
+    eg_export_button_1.place(x=625.0,y=200.0,width=77.21710205078125,height=30.0)
     
-#     canvas.create_text(110.0,255.0,anchor="nw",text="Error tolerance (ppm): ",fill="#000000",font=("Inter", 16 * -1))
-#     error_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=errorthreshold)
-#     error_entry.place(x=274.0,y=250.0,width=100.0,height=28.0)
+    canvas.create_text(110.0,255.0,anchor="nw",text="Error tolerance (ppm): ",fill="#000000",font=("Inter", 16 * -1))
+    error_entry = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=errorthreshold)
+    error_entry.place(x=274.0,y=250.0,width=100.0,height=28.0)
     
-#     canvas.create_text(75.0,290.0,anchor="nw",text="Name",fill="#000000",font=("Inter", 16 * -1))
-#     canvas.create_text(215.0,290.0,anchor="nw",text="m/z",fill="#000000",font=("Inter", 16 * -1))
+    canvas.create_text(75.0,290.0,anchor="nw",text="Name",fill="#000000",font=("Inter", 16 * -1))
+    canvas.create_text(215.0,290.0,anchor="nw",text="m/z",fill="#000000",font=("Inter", 16 * -1))
     
-#     canvas.create_text(30.0,314.0,anchor="nw",text="1: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry115a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_1_name_entry)
-#     entry115a_name.place(x=50.0,y=310.0,width=100.0,height=28.0)
-#     entry115a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_1_mass_entry)
-#     entry115a_mass.place(x=175.0,y=310.0,width=100.0,height=28.0)
+    canvas.create_text(30.0,314.0,anchor="nw",text="1: ",fill="#000000",font=("Inter", 16 * -1))
+    entry115a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_1_name_entry)
+    entry115a_name.place(x=50.0,y=310.0,width=100.0,height=28.0)
+    entry115a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_1_mass_entry)
+    entry115a_mass.place(x=175.0,y=310.0,width=100.0,height=28.0)
     
-#     canvas.create_text(30.0,355.0,anchor="nw",text="2: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry115b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_2_name_entry)
-#     entry115b_name.place(x=50.0,y=350.0,width=100.0,height=28.0)
-#     entry115b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_2_mass_entry)
-#     entry115b_mass.place(x=175.0,y=350.0,width=100.0,height=28.0)
+    canvas.create_text(30.0,355.0,anchor="nw",text="2: ",fill="#000000",font=("Inter", 16 * -1))
+    entry115b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_2_name_entry)
+    entry115b_name.place(x=50.0,y=350.0,width=100.0,height=28.0)
+    entry115b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_2_mass_entry)
+    entry115b_mass.place(x=175.0,y=350.0,width=100.0,height=28.0)
     
-#     canvas.create_text(30.0,393.0,anchor="nw",text="3: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_3_name_entry)
-#     entry116a_name.place(x=50.0,y=390.0,width=100.0,height=28.0)
-#     entry116a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_3_mass_entry)
-#     entry116a_mass.place(x=175.0,y=390.0,width=100.0,height=28.0)
+    canvas.create_text(30.0,393.0,anchor="nw",text="3: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_3_name_entry)
+    entry116a_name.place(x=50.0,y=390.0,width=100.0,height=28.0)
+    entry116a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_3_mass_entry)
+    entry116a_mass.place(x=175.0,y=390.0,width=100.0,height=28.0)
     
-#     canvas.create_text(30.0,435.0,anchor="nw",text="4: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_4_name_entry)
-#     entry116b_name.place(x=50.0,y=430.0,width=100.0,height=28.0)
-#     entry116b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_4_mass_entry)
-#     entry116b_mass.place(x=175.0,y=430.0,width=100.0,height=28.0)
+    canvas.create_text(30.0,435.0,anchor="nw",text="4: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_4_name_entry)
+    entry116b_name.place(x=50.0,y=430.0,width=100.0,height=28.0)
+    entry116b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_4_mass_entry)
+    entry116b_mass.place(x=175.0,y=430.0,width=100.0,height=28.0)
     
-#     canvas.create_text(30.0,475.0,anchor="nw",text="5: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116c_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_5_name_entry)
-#     entry116c_name.place(x=50.0,y=470.0,width=100.0,height=28.0)
-#     entry116c_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_5_mass_entry)
-#     entry116c_mass.place(x=175.0,y=470.0,width=100.0,height=28.0)
+    canvas.create_text(30.0,475.0,anchor="nw",text="5: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116c_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_5_name_entry)
+    entry116c_name.place(x=50.0,y=470.0,width=100.0,height=28.0)
+    entry116c_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_5_mass_entry)
+    entry116c_mass.place(x=175.0,y=470.0,width=100.0,height=28.0)
     
-#     canvas.create_text(30.0,515.0,anchor="nw",text="6: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116d_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_6_name_entry)
-#     entry116d_name.place(x=50.0,y=510.0,width=100.0,height=28.0)
-#     entry116d_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_6_mass_entry)
-#     entry116d_mass.place(x=175.0,y=510.0,width=100.0,height=28.0)
+    canvas.create_text(30.0,515.0,anchor="nw",text="6: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116d_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_6_name_entry)
+    entry116d_name.place(x=50.0,y=510.0,width=100.0,height=28.0)
+    entry116d_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_6_mass_entry)
+    entry116d_mass.place(x=175.0,y=510.0,width=100.0,height=28.0)
     
-#     canvas.create_text(400.0,290.0,anchor="nw",text="Name",fill="#000000",font=("Inter", 16 * -1))
-#     canvas.create_text(540.0,290.0,anchor="nw",text="m/z",fill="#000000",font=("Inter", 16 * -1))
+    canvas.create_text(400.0,290.0,anchor="nw",text="Name",fill="#000000",font=("Inter", 16 * -1))
+    canvas.create_text(540.0,290.0,anchor="nw",text="m/z",fill="#000000",font=("Inter", 16 * -1))
     
-#     canvas.create_text(355.0,314.0,anchor="nw",text="7: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry115a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_7_name_entry)
-#     entry115a_name.place(x=375.0,y=310.0,width=100.0,height=28.0)
-#     entry115a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_7_mass_entry)
-#     entry115a_mass.place(x=500.0,y=310.0,width=100.0,height=28.0)
+    canvas.create_text(355.0,314.0,anchor="nw",text="7: ",fill="#000000",font=("Inter", 16 * -1))
+    entry115a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_7_name_entry)
+    entry115a_name.place(x=375.0,y=310.0,width=100.0,height=28.0)
+    entry115a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_7_mass_entry)
+    entry115a_mass.place(x=500.0,y=310.0,width=100.0,height=28.0)
     
-#     canvas.create_text(355.0,355.0,anchor="nw",text="8: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry115b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_8_name_entry)
-#     entry115b_name.place(x=375.0,y=350.0,width=100.0,height=28.0)
-#     entry115b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_8_mass_entry)
-#     entry115b_mass.place(x=500.0,y=350.0,width=100.0,height=28.0)
+    canvas.create_text(355.0,355.0,anchor="nw",text="8: ",fill="#000000",font=("Inter", 16 * -1))
+    entry115b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_8_name_entry)
+    entry115b_name.place(x=375.0,y=350.0,width=100.0,height=28.0)
+    entry115b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_8_mass_entry)
+    entry115b_mass.place(x=500.0,y=350.0,width=100.0,height=28.0)
     
-#     canvas.create_text(355.0,393.0,anchor="nw",text="9: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_9_name_entry)
-#     entry116a_name.place(x=375.0,y=390.0,width=100.0,height=28.0)
-#     entry116a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_9_mass_entry)
-#     entry116a_mass.place(x=500.0,y=390.0,width=100.0,height=28.0)
+    canvas.create_text(355.0,393.0,anchor="nw",text="9: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116a_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_9_name_entry)
+    entry116a_name.place(x=375.0,y=390.0,width=100.0,height=28.0)
+    entry116a_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_9_mass_entry)
+    entry116a_mass.place(x=500.0,y=390.0,width=100.0,height=28.0)
     
-#     canvas.create_text(347.0,435.0,anchor="nw",text="10: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_10_name_entry)
-#     entry116b_name.place(x=375.0,y=430.0,width=100.0,height=28.0)
-#     entry116b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_10_mass_entry)
-#     entry116b_mass.place(x=500.0,y=430.0,width=100.0,height=28.0)
+    canvas.create_text(347.0,435.0,anchor="nw",text="10: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116b_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_10_name_entry)
+    entry116b_name.place(x=375.0,y=430.0,width=100.0,height=28.0)
+    entry116b_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_10_mass_entry)
+    entry116b_mass.place(x=500.0,y=430.0,width=100.0,height=28.0)
     
-#     canvas.create_text(347.0,475.0,anchor="nw",text="11: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116c_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_11_name_entry)
-#     entry116c_name.place(x=375.0,y=470.0,width=100.0,height=28.0)
-#     entry116c_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_11_mass_entry)
-#     entry116c_mass.place(x=500.0,y=470.0,width=100.0,height=28.0)
+    canvas.create_text(347.0,475.0,anchor="nw",text="11: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116c_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_11_name_entry)
+    entry116c_name.place(x=375.0,y=470.0,width=100.0,height=28.0)
+    entry116c_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_11_mass_entry)
+    entry116c_mass.place(x=500.0,y=470.0,width=100.0,height=28.0)
     
-#     canvas.create_text(347.0,515.0,anchor="nw",text="12: ",fill="#000000",font=("Inter", 16 * -1))
-#     entry116d_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_12_name_entry)
-#     entry116d_name.place(x=375.0,y=510.0,width=100.0,height=28.0)
-#     entry116d_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_12_mass_entry)
-#     entry116d_mass.place(x=500.0,y=510.0,width=100.0,height=28.0)
+    canvas.create_text(347.0,515.0,anchor="nw",text="12: ",fill="#000000",font=("Inter", 16 * -1))
+    entry116d_name = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_12_name_entry)
+    entry116d_name.place(x=375.0,y=510.0,width=100.0,height=28.0)
+    entry116d_mass = Entry(canvas,bd=0,bg="#FFFFFF",highlightthickness=0,textvariable=twelveplex_12_mass_entry)
+    entry116d_mass.place(x=500.0,y=510.0,width=100.0,height=28.0)
     
-#     button_2 = Button(canvas,text='Begin Analysis',borderwidth=0,highlightthickness=0,relief="flat",command=begin_reporter_ion_extraction)
-#     button_2.place(x=300.0,y=575.0,width=90,height=30.0)
+    button_2 = Button(canvas,text='Begin Analysis',borderwidth=0,highlightthickness=0,relief="flat",command=begin_reporter_ion_extraction)
+    button_2.place(x=300.0,y=575.0,width=90,height=30.0)
     
-#     extract_window.resizable(True, True)
-#     extract_window.mainloop()
+    extract_window.resizable(True, True)
+    extract_window.mainloop()
 
 def launch_motif_build_gui():
     OUTPUT_PATH = Path(__file__).parent
@@ -431,28 +403,13 @@ def launch_motif_build_gui():
     motif_window.attributes("-topmost", True)
     motif_window.title('MotifQuest')
 
-    # Initialize StringVar variables before creating Entry widgets
     min_motif_len_in = StringVar()
-   # min_motif_len_in.set('3')
-
     min_num_motif_inst = StringVar()
-    #min_num_motif_inst.set('2')
-
     part_motif_flank = StringVar()
-    #part_motif_flank.set('3')
-
     fasta_path_input = StringVar()
-   # fasta_path_input.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\input\duplicate_removed_crustacean_database_validated_formatted20220725.fasta")
-
     t_val = StringVar()
-    #t_val.set('0')
-
     output_dir = StringVar()
-    #output_dir.set(r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\output")
-
     clustal_path = StringVar()
-    #clustal_path.set(r"C:\Users\lawashburn\Downloads\clustal-omega-1.2.2\clustal-omega-1.2.2-win64\clustalo.exe")
-
     def build_motif_db():
 
         from MotifQuest_code_v02 import start_building_a_motif_db
@@ -460,18 +417,13 @@ def launch_motif_build_gui():
         output_folder_path = output_dir.get()
         min_motif_len_get = min_motif_len_in.get()
         min_motif_len_get = int(min_motif_len_get)
-        
         t_value_get = t_val.get()
         t_value_get = int(t_value_get)
-        
         t_value_format = []
         t_value_format.append(t_value_get)
-
         min_motif_inst_get = min_num_motif_inst.get()
         min_motif_inst_get = int(min_motif_inst_get)
-        
         clustal_omega_path = clustal_path.get()
-
         start_building_a_motif_db(in_file, output_folder_path, t_value_format, min_motif_len_get, min_motif_inst_get,clustal_omega_path)
         messagebox.showinfo("Finished", "MotifQuest has finished")
 
@@ -487,255 +439,39 @@ def launch_motif_build_gui():
         filename = filedialog.askdirectory()
         output_dir.set(filename)
 
-    motif_canvas = Canvas(
-        motif_window,
-        bg = "#423C56",
-        height = 750,
-        width = 778,
-        bd = 0,
-        highlightthickness = 0,
-        relief = "ridge"
-    )
-
-    motif_canvas.place(x = 0, y = 0)
-    motif_canvas.create_rectangle(
-        11.0,
-        101.0,
-        748.0,
-        517.0,
-        fill="#D9D9D9",
-        outline=""
-    )
-
-    motif_canvas.create_text(
-        17.0,
-        123.0,
-        anchor="nw",
-        text="Import FASTA Database",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    motif_canvas.create_text(
-        5.0,
-        0.0,
-        anchor="nw",
-        text="MotifQuest",
-        fill="#FFFFFF",
-        font=("Inter", 64 * -1)
-    )
-
-    motif_entry_1 = Entry(
-        motif_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=fasta_path_input
-    )
-    motif_entry_1.place(
-        x=213.0,
-        y=123.0,
-        width=340.0,
-        height=28.0
-    )
-
-    entry_2 = Entry(
-        motif_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=min_motif_len_in
-    )
-    entry_2.place(
-        x=213.0,
-        y=209.0,
-        width=340.0,
-        height=28.0
-    )
-
-    entry_3 = Entry(
-        motif_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=min_num_motif_inst
-    )
-    entry_3.place(
-        x=213.0,
-        y=259.0,
-        width=200.0,
-        height=28.0
-    )
-
-    entry_4 = Entry(
-        motif_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=part_motif_flank
-    )
-    entry_4.place(
-        x=213.0,
-        y=308.0,
-        width=340.0,
-        height=28.0
-    )
-
-    entry_5 = Entry(
-        motif_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=clustal_path
-    )
-    entry_5.place(
-        x=213.0,
-        y=400.0,
-        width=340.0,
-        height=28.0
-    )
-
-    button_1 = Button(
-        motif_window,
-        text='Browse',
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: browse_files_fasta(),
-        relief="flat"
-    )
-    button_1.place(
-        x=575.0,
-        y=123.0,
-        width=78.21710205078125,
-        height=30.0
-    )
-
-    motif_canvas.create_text(
-        37.0,
-        360.0,
-        anchor="nw",
-        text="Export Directory:",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    entry_7 = Entry(
-        motif_canvas,
-        bd=0,
-        highlightthickness=0,
-        textvariable=output_dir
-    )
-    entry_7.place(
-        x=213.0,
-        y=355.0,
-        width=340.0,
-        height=28.0
-    )
-
-    button_3 = Button(
-        motif_window,
-        text='Browse',
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: browse_files(),
-        relief="flat"
-    )
-    button_3.place(
-        x=575.0,
-        y=355.0,
-        width=78.21710205078125,
-        height=30.0
-    )
-
-    motif_canvas.create_text(
-        33.0,
-        173.0,
-        anchor="nw",
-        text="T-Value range",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    motif_canvas.create_text(
-        21.0,
-        218.0,
-        anchor="nw",
-        text="Minimum Motif Length",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    motif_canvas.create_text(
-        15.0,
-        260.0,
-        anchor="nw",
-        text="Minimum Number of\nMotif Instances",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    entry_8 = Entry(
-        motif_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=t_val
-    )
-    entry_8.place(
-        x=213.0,
-        y=166.0,
-        width=72.0,
-        height=28.0
-    )
-
-    motif_canvas.create_text(
-        18.0,
-        315.0,
-        anchor="nw",
-        text="Partial Motif Flank Size",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    motif_canvas.create_text(
-        18.0,
-        411.0,
-        anchor="nw",
-        text="Clustal Omega Path",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    button_4 = Button(
-        motif_window,
-        text='Begin Analysis',
-        borderwidth=0,
-        highlightthickness=0,
-        command=build_motif_db,
-        relief="flat"
-    )
-    button_4.place(
-        x=250.0,
-        y=450.0,
-        width=141.0,
-        height=30.0
-    )
-
-    button_5 = Button(
-        motif_window,
-        text='Browse',
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: browse_files_clustalo(),
-        relief="flat"
-    )
-    button_5.place(
-        x=575.0,
-        y=400.0,
-        width=78.21710205078125,
-        height=30.0
-    )
-
+    motif_canvas = Canvas(motif_window, bg="#423C56", height=750, width=778, bd=0, highlightthickness=0, relief="ridge")
+    motif_canvas.place(x=0, y=0)
+    motif_canvas.create_rectangle(11.0, 101.0, 748.0, 517.0, fill="#D9D9D9", outline="")
+    motif_canvas.create_text(17.0, 123.0, anchor="nw", text="Import FASTA Database", fill="#000000", font=("Inter", 16 * -1))
+    motif_canvas.create_text(5.0, 0.0, anchor="nw", text="MotifQuest", fill="#FFFFFF", font=("Inter", 64 * -1))
+    motif_entry_1 = Entry(motif_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=fasta_path_input)
+    motif_entry_1.place(x=213.0, y=123.0, width=340.0, height=28.0)
+    entry_2 = Entry(motif_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=min_motif_len_in)
+    entry_2.place(x=213.0, y=209.0, width=340.0, height=28.0)
+    entry_3 = Entry(motif_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=min_num_motif_inst)
+    entry_3.place(x=213.0, y=259.0, width=200.0, height=28.0)
+    entry_4 = Entry(motif_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=part_motif_flank)
+    entry_4.place(x=213.0, y=308.0, width=340.0, height=28.0)
+    entry_5 = Entry(motif_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=clustal_path)
+    entry_5.place(x=213.0, y=400.0, width=340.0, height=28.0)
+    button_1 = Button(motif_window, text='Browse', borderwidth=0, highlightthickness=0, command=lambda: browse_files_fasta(), relief="flat")
+    button_1.place(x=575.0, y=123.0, width=78.21710205078125, height=30.0)
+    motif_canvas.create_text(37.0, 360.0, anchor="nw", text="Export Directory:", fill="#000000", font=("Inter", 16 * -1))
+    entry_7 = Entry(motif_canvas, bd=0, highlightthickness=0, textvariable=output_dir)
+    entry_7.place(x=213.0, y=355.0, width=340.0, height=28.0)
+    button_3 = Button(motif_window, text='Browse', borderwidth=0, highlightthickness=0, command=lambda: browse_files(), relief="flat")
+    button_3.place(x=575.0, y=355.0, width=78.21710205078125, height=30.0)
+    motif_canvas.create_text(33.0, 173.0, anchor="nw", text="T-Value range", fill="#000000", font=("Inter", 16 * -1))
+    motif_canvas.create_text(21.0, 218.0, anchor="nw", text="Minimum Motif Length", fill="#000000", font=("Inter", 16 * -1))
+    motif_canvas.create_text(15.0, 260.0, anchor="nw", text="Minimum Number of\nMotif Instances", fill="#000000", font=("Inter", 16 * -1))
+    entry_8 = Entry(motif_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=t_val)
+    entry_8.place(x=213.0, y=166.0, width=72.0, height=28.0)
+    motif_canvas.create_text(18.0, 315.0, anchor="nw", text="Partial Motif Flank Size", fill="#000000", font=("Inter", 16 * -1))
+    motif_canvas.create_text(18.0, 411.0, anchor="nw", text="Clustal Omega Path", fill="#000000", font=("Inter", 16 * -1))
+    button_4 = Button(motif_window, text='Begin Analysis', borderwidth=0, highlightthickness=0, command=build_motif_db, relief="flat")
+    button_4.place(x=250.0, y=450.0, width=141.0, height=30.0)
+    button_5 = Button(motif_window, text='Browse', borderwidth=0, highlightthickness=0, command=lambda: browse_files_clustalo(), relief="flat")
+    button_5.place(x=575.0, y=400.0, width=78.21710205078125, height=30.0)
     motif_window.resizable(False, False)
     motif_window.mainloop()
 
@@ -751,16 +487,10 @@ def launch_lib_build_gui():
     lib_window.configure(bg = "#423C56")
     lib_window.attributes("-topmost", True)
 
-
-
     eg_results_dir = StringVar()
     out_dir = StringVar()
     error = StringVar()
-    
-    # eg_results_dir.set(r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data")
-    # out_dir.set(r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.0\sl_test2")
-    #error.set('0.02')
-    
+
     def in_dir_path_get():
         in_dir_path_out = filedialog.askdirectory() 
         eg_results_dir.set(in_dir_path_out)
@@ -780,8 +510,6 @@ def launch_lib_build_gui():
         build_a_SL(eg_results_dir_get,out_dir_get,error_get)
         
         messagebox.showinfo("Process Complete", "The library has been built.")
-    
-    
 
     canvas = Canvas(
         lib_window,
@@ -899,10 +627,7 @@ def launch_lib_build_gui():
         width=69.0,
         height=28.0
     )
-    #############
 
-    
-######################
     button_2 = Button(
         canvas,
         text='Browse',
@@ -1020,284 +745,58 @@ def launch_quant():
     def quant_delete_sample_name():
             quant_entry_5.delete(quant_entry_5.curselection())
 
-
-    quant_canvas = Canvas(
-        quant_window,
-        bg = "#423C56",
-        height = 883,
-        width = 778,
-        bd = 0,
-        highlightthickness = 0,
-        relief = "ridge"
-    )
-
-    quant_canvas.place(x = 0, y = 0)
-    quant_canvas.create_rectangle(
-        10.0,
-        109.0,
-        747.0,
-        525.0,
-        fill="#D9D9D9",
-        outline="")
-
-    quant_canvas.create_text(
-        15.0,
-        128.0,
-        anchor="nw",
-        text="Import Results:",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    quant_canvas.create_text(
-        5.0,
-        0.0,
-        anchor="nw",
-        text="Quantify Results",
-        fill="#FFFFFF",
-        font=("Inter", 64 * -1)
-    )
-
-    quant_entry_image_1 = PhotoImage(
-        file=relative_to_assets("quant_entry_1.png"))
-    quant_entry_bg_1 = quant_canvas.create_image(
-        301.0,
-        138.0,
-        image=quant_entry_image_1
-    )
-    quant_entry_1 = Entry(
-        quant_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable=quant_input_file_path
-    )
-    quant_entry_1.place(
-        x=131.0,
-        y=123.0,
-        width=340.0,
-        height=28.0
-    )
-
-    quant_button_image_1 = PhotoImage(
-        file=relative_to_assets("quant_button_1.png"))
-    quant_button_1 = Button(quant_canvas,
-        image=quant_button_image_1,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quant_input_file_path_get,
-        relief="flat"
-    )
-    quant_button_1.place(
-        x=480.0,
-        y=123.0,
-        width=78.21710205078125,
-        height=30.0
-    )
-
-    quant_canvas.create_text(
-        11.0,
-        452.0,
-        anchor="nw",
-        text="Export Directory:",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    quant_entry_image_2 = PhotoImage(
-        file=relative_to_assets("quant_entry_2.png"))
-    quant_entry_bg_2 = quant_canvas.create_image(
-        323.0,
-        462.0,
-        image=quant_entry_image_2
-    )
-    quant_entry_2 = Entry(
-        quant_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable = quant_output_dir
-    )
-    quant_entry_2.place(
-        x=153.0,
-        y=447.0,
-        width=340.0,
-        height=28.0
-    )
-
-    quant_button_image_2 = PhotoImage(
-        file=relative_to_assets("quant_button_2.png"))
-    quant_button_2 = Button(quant_canvas,
-        image=quant_button_image_2,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quant_output_path_get,
-        relief="flat"
-    )
-    quant_button_2.place(
-        x=502.0,
-        y=447.0,
-        width=78.21710205078125,
-        height=30.0
-    )
-
-    quant_canvas.create_text(
-        15.0,
-        168.0,
-        anchor="nw",
-        text="Sample Name:",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    quant_canvas.create_text(
-        14.0,
-        200.0,
-        anchor="nw",
-        text="File List:",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    quant_entry_image_3 = PhotoImage(
-        file=relative_to_assets("quant_entry_3.png"))
-    quant_entry_bg_3 = quant_canvas.create_image(
-        301.0,
-        178.0,
-        image=quant_entry_image_3
-    )
-    quant_entry_3 = Entry(
-        quant_canvas,
-        bd=0,
-        bg="#FFFFFF",
-        highlightthickness=0,
-        textvariable = quant_input_sample_name
-    )
-    quant_entry_3.place(
-        x=131.0,
-        y=163.0,
-        width=340.0,
-        height=28.0
-    )
-
-    quant_entry_4 = Listbox(quant_canvas,width=50)
-    quant_entry_4.place(
-        x=17.0,
-        y=225.0,
-        width=340.0,
-        height=144.0
-    )
-
-    quant_canvas.create_text(
-        352.0,
-        200.0,
-        anchor="nw",
-        text="Name List:",
-        fill="#000000",
-        font=("Inter", 16 * -1)
-    )
-
-    quant_entry_5 = Listbox(quant_canvas,width=50)
-    quant_entry_5.place(
-        x=372.0,
-        y=225.0,
-        width=340.0,
-        height=144.0
-    )
-
-    quant_button_image_3 = PhotoImage(
-        file=relative_to_assets("quant_button_3.png"))
-    quant_button_3 = Button(quant_canvas,
-        image=quant_button_image_3,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quant_add_name,
-        relief="flat"
-    )
-    quant_button_3.place(
-        x=480.0,
-        y=162.0,
-        width=109.44155883789062,
-        height=31.0
-    )
-
-    quant_button_image_4 = PhotoImage(
-        file=relative_to_assets("quant_button_4.png"))
-    quant_button_4 = Button(quant_canvas,
-        image=quant_button_image_4,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quant_add_file,
-        relief="flat"
-    )
-    quant_button_4.place(
-        x=558.0,
-        y=123.0,
-        width=77.21710205078125,
-        height=30.0
-    )
-
-    quant_button_image_5 = PhotoImage(
-        file=relative_to_assets("quant_button_5.png"))
-    quant_button_5 = Button(quant_canvas,
-        image=quant_button_image_5,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quant_delete_file,
-        relief="flat"
-    )
-    quant_button_5.place(
-        x=131.0,
-        y=381.0,
-        width=100.0,
-        height=30.0
-    )
-
-    quant_button_image_6 = PhotoImage(
-        file=relative_to_assets("quant_button_6.png"))
-    quant_button_6 = Button(quant_canvas,
-        image=quant_button_image_6,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quant_delete_sample_name,
-        relief="flat"
-    )
-    quant_button_6.place(
-        x=503.0,
-        y=381.0,
-        width=100.0,
-        height=30.0
-    )
-
-    quant_button_image_7 = PhotoImage(
-        file=relative_to_assets("quant_button_7.png"))
-    quant_button_7 = Button(quant_canvas,
-        image=quant_button_image_7,
-        borderwidth=0,
-        highlightthickness=0,
-        command=quantify_summary_begin,
-        relief="flat"
-    )
-    quant_button_7.place(
-        x=319.0,
-        y=487.0,
-        width=141.0,
-        height=30.0
-    )
-
-    quant_canvas.create_rectangle(
-        638.0,
-        828.0,
-        738.0,
-        928.0,
-        fill="#000000",
-        outline="")
+    quant_canvas = Canvas(quant_window, bg="#423C56", height=883, width=778, bd=0, highlightthickness=0, relief="ridge")
+    quant_canvas.place(x=0, y=0)
+    quant_canvas.create_rectangle(10.0, 109.0, 747.0, 525.0, fill="#D9D9D9", outline="")
+    quant_canvas.create_text(15.0, 128.0, anchor="nw", text="Import Results:", fill="#000000", font=("Inter", 16 * -1))
+    quant_canvas.create_text(5.0, 0.0, anchor="nw", text="Quantify Results", fill="#FFFFFF", font=("Inter", 64 * -1))
+    quant_entry_1 = Entry(quant_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=quant_input_file_path)
+    quant_entry_1.place(x=131.0, y=123.0, width=340.0, height=28.0)
+    quant_button_image_1 = PhotoImage(file=relative_to_assets("quant_button_1.png"))
+    quant_button_1 = Button(quant_canvas, image=quant_button_image_1, borderwidth=0, highlightthickness=0, command=quant_input_file_path_get, relief="flat")
+    quant_button_1.place(x=480.0, y=123.0, width=78.21710205078125, height=30.0)
+    
+    quant_canvas.create_text(11.0, 452.0, anchor="nw", text="Export Directory:", fill="#000000", font=("Inter", 16 * -1))
+    quant_entry_2 = Entry(quant_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=quant_output_dir)
+    quant_entry_2.place(x=153.0, y=447.0, width=340.0, height=28.0)
+    quant_button_image_2 = PhotoImage(file=relative_to_assets("quant_button_2.png"))
+    quant_button_2 = Button(quant_canvas, image=quant_button_image_2, borderwidth=0, highlightthickness=0, command=quant_output_path_get, relief="flat")
+    quant_button_2.place(x=502.0, y=447.0, width=78.21710205078125, height=30.0)
+    
+    quant_canvas.create_text(15.0, 168.0, anchor="nw", text="Sample Name:", fill="#000000", font=("Inter", 16 * -1))
+    quant_canvas.create_text(14.0, 200.0, anchor="nw", text="File List:", fill="#000000", font=("Inter", 16 * -1))
+    quant_entry_3 = Entry(quant_canvas, bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=quant_input_sample_name)
+    quant_entry_3.place(x=131.0, y=163.0, width=340.0, height=28.0)
+    quant_entry_4 = Listbox(quant_canvas, width=50)
+    quant_entry_4.place(x=17.0, y=225.0, width=340.0, height=144.0)
+    quant_canvas.create_text(352.0, 200.0, anchor="nw", text="Name List:", fill="#000000", font=("Inter", 16 * -1))
+    quant_entry_5 = Listbox(quant_canvas, width=50)
+    quant_entry_5.place(x=372.0, y=225.0, width=340.0, height=144.0)
+    
+    quant_button_image_3 = PhotoImage(file=relative_to_assets("quant_button_3.png"))
+    quant_button_3 = Button(quant_canvas, image=quant_button_image_3, borderwidth=0, highlightthickness=0, command=quant_add_name, relief="flat")
+    quant_button_3.place(x=480.0, y=162.0, width=109.44155883789062, height=31.0)
+    
+    quant_button_image_4 = PhotoImage(file=relative_to_assets("quant_button_4.png"))
+    quant_button_4 = Button(quant_canvas, image=quant_button_image_4, borderwidth=0, highlightthickness=0, command=quant_add_file, relief="flat")
+    quant_button_4.place(x=558.0, y=123.0, width=77.21710205078125, height=30.0)
+    
+    quant_button_image_5 = PhotoImage(file=relative_to_assets("quant_button_5.png"))
+    quant_button_5 = Button(quant_canvas, image=quant_button_image_5, borderwidth=0, highlightthickness=0, command=quant_delete_file, relief="flat")
+    quant_button_5.place(x=131.0, y=381.0, width=100.0, height=30.0)
+    
+    quant_button_image_6 = PhotoImage(file=relative_to_assets("quant_button_6.png"))
+    quant_button_6 = Button(quant_canvas, image=quant_button_image_6, borderwidth=0, highlightthickness=0, command=quant_delete_sample_name, relief="flat")
+    quant_button_6.place(x=503.0, y=381.0, width=100.0, height=30.0)
+    
+    quant_button_image_7 = PhotoImage(file=relative_to_assets("quant_button_7.png"))
+    quant_button_7 = Button(quant_canvas, image=quant_button_image_7, borderwidth=0, highlightthickness=0, command=quantify_summary_begin, relief="flat")
+    quant_button_7.place(x=319.0, y=487.0, width=141.0, height=30.0)
+    
+    quant_canvas.create_rectangle(638.0, 828.0, 738.0, 928.0, fill="#000000", outline="")
+    
     quant_window.resizable(False, False)
     quant_window.mainloop()
-
-
-
-                
 
 
 def openweb_liweb():
@@ -1312,7 +811,7 @@ def openweb_git():
 
 def openweb_user_manual():
     new = 1
-    url = "https://docs.google.com/document/d/e/2PACX-1vRKyqvEpRbcrYHWTq1CLRImNfC6f_gxaXnKgH2I_ZX_E-kSA2PvUiy4d8kMddS2B8PcEwsLAngMcjvg/pub"
+    url = "https://docs.google.com/document/d/e/2PACX-1vRwKSjIl6wu88MTObZ7G0QYl9wzg7Rm065o4AxM1zzAMspEfHChLMcHMmWFWD8BjLIKSsvsqONeHknb/pub"
     webbrowser.open(url,new=new)
 
 def relative_to_assets(path: str) -> Path:
@@ -1569,8 +1068,6 @@ def begin_search():
     fdr_check= FDR_threshold.get()
     eg_check= eg_threshold.get()
 
-
-
     if len(mz_min_check)==0:
         messagebox.showerror('Input Error', 'Input minimum m/z value')
     if len(mz_min_check)>0:
@@ -1690,1039 +1187,132 @@ toolmenu.add_command(label="Quantiation Report", command = launch_quant)
 toolmenu.add_command(label="Build Spectral Library", command = launch_lib_build_gui)
 toolmenu.add_command(label="Launch DIA-NN GUI", command=launch_diann)
 toolmenu.add_command(label="Launch MotifQuest", command=launch_motif_build_gui)
-#toolmenu.add_command(label="Extract Reporter Ions", command=reporter_ion_extraction_begin)
+toolmenu.add_command(label="Extract Reporter Ions", command=reporter_ion_extraction_begin)
 menubar.add_cascade(label="Tools", menu=toolmenu)
 
 window.config(menu=menubar)
 
-canvas = Canvas(
-    window,
-    bg = "#423C56",
-    height = 883,
-    width = 778,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
-
+canvas = Canvas(window,bg = "#423C56",height = 883,width = 778,bd = 0,highlightthickness = 0,relief = "ridge")
 canvas.place(x = 0, y = 0)
-canvas.create_rectangle(
-    10.0,
-    200.0,
-    773.0,
-    257.0,
-    fill="#D9D9D9",
-    outline="")
+canvas.create_rectangle(10.0,200.0,773.0,257.0,fill="#D9D9D9",outline="")
+canvas.create_text(20.0,216.0,anchor="nw",text="m/z range",fill="#000000",font=("Inter", 16 * -1))
+canvas.create_text(171.0,219.0,anchor="nw",text="-",fill="#000000",font=("Inter", 16 * -1))
+canvas.create_text(270.0,210.0,anchor="nw",text="minimum\nintensity",fill="#000000",font=("Inter", 16 * -1),justify='center')
+canvas.create_text(420.0,210.0,anchor="nw",text="max precursor\ncharge",fill="#000000",font=("Inter", 16 * -1),justify='center')
+canvas.create_text(600.0,210.0,anchor="nw",text="max fragment\ncharge",fill="#000000",font=("Inter", 16 * -1),justify='center')
+canvas.create_text(5.0, 166.0, anchor="nw", text="2. Spectral processing", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_text(5.0, 76.0, anchor="nw", text="1. Spectral input", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_rectangle(10.0, 109.0, 369.0, 166.0, fill="#D9D9D9", outline="")
+canvas.create_text(32.0, 128.0, anchor="nw", text="Raw .MS2", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_rectangle(411.0, 109.0, 770.0, 166.0, fill="#D9D9D9", outline="")
+entry_1 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=input_path_format_MS2)
+entry_1.place(x=527.0, y=123.0, width=146.0, height=28.0)
+canvas.create_text(440.0, 119.0, anchor="nw", text="Formatted\nRaw .MS2", fill="#000000", font=("Inter", 16 * -1), justify='center')
+canvas.create_text(332.0, 125.0, anchor="nw", text="or", fill="#FFFFFF", font=("Inter", 16 * -1))
+canvas.create_text(5.0, 582.0, anchor="nw", text="5. PSM assignment", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_rectangle(10.0, 613.0, 770.0, 715.0, fill="#D9D9D9", outline="")
+canvas.create_text(14.0, 626.0, anchor="nw", text="Motif database", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_text(425.0, 626.0, anchor="nw", text="Confident coverage threshold (%)", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_text(5.0, 720.0, anchor="nw", text="6. Export results", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_rectangle(10.0, 749.0, 411.0, 808.0, fill="#D9D9D9", outline="")
+canvas.create_text(29.0, 769.0, anchor="nw", text="Output directory", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_text(5.0, 265.0, anchor="nw", text="3. Database definition", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_rectangle(10.0, 315.0, 369.0, 436.0, fill="#D9D9D9", outline="")
+canvas.create_text(32.0, 334.0, anchor="nw", text="Database", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_text(21.0, 388.0, anchor="nw", text="Target\npeptide list", fill="#000000", font=("Inter", 16 * -1), justify='center')
+canvas.create_text(338.0, 335.0, anchor="nw", text="or", fill="#FFFFFF", font=("Inter", 16 * -1))
+canvas.create_text(7.0, 293.0, anchor="nw", text="Pre-built database", fill="#FFFFFF", font=("Inter", 16 * -1))
+canvas.create_text(420.0, 293.0, anchor="nw", text="Generate from .fasta", fill="#FFFFFF", font=("Inter", 16 * -1))
+canvas.create_rectangle(414.0, 316.0, 773.0, 374.0, fill="#D9D9D9", outline="")
+canvas.create_text(436.0, 335.0, anchor="nw", text="Database", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_rectangle(10.0, 466.0, 773.0, 579.0, fill="#D9D9D9", outline="")
+canvas.create_text(25.0, 489.0, anchor="nw", text="Precursor error (ppm)", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_text(14.0, 540.0, anchor="nw", text="Modifications", fill="#000000", font=("Inter", 16 * -1))
+canvas.create_text(280.0, 489.0, anchor="nw", text="Fragment error (Da)", fill="#000000", font=("Inter", 16 * -1))
+button_modification = Button(text='Select Modifications', borderwidth=0, highlightthickness=0, command=print('Modifications'), relief="flat")
+button_modification.place(x=125.0, y=535.0, width=150, height=30.0)
+canvas.create_text(550.0, 489.0, anchor="nw", text="Max mods/peptide", fill="#000000", font=("Inter", 16 * -1), justify='center')
+canvas.create_text(5.0, 436.0, anchor="nw", text="4. Database search", fill="#FFFFFF", font=("Inter", 24 * -1))
+button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
+button_1 = Button(image=button_image_1, borderwidth=0, highlightthickness=0, command=begin_search, relief="flat")
+button_1.place(x=9.0, y=820.0, width=401.0, height=59.0)
+image_image_0 = PhotoImage(file=relative_to_assets("EndoGenius_Logo_12.png"))
+image_0 = canvas.create_image(400.0, 60.0, image=image_image_0)
+image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
+image_1 = canvas.create_image(617.0, 799.0, image=image_image_1)
+canvas.create_text(390.0, 668.0, anchor="nw", text="FDR\nThreshold", fill="#000000", font=("Inter", 16 * -1), justify='center')
+canvas.create_text(550.0, 668.0, anchor="nw", text="EndoGenius Score\nThreshold", fill="#000000", font=("Inter", 16 * -1), justify='center')
+button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
+button_2 = Button(image=button_image_2, borderwidth=0, highlightthickness=0, command=formatted_MS2_path, relief="flat")
+button_2.place(x=678.0, y=123.0, width=77.21710205078125, height=30.0)
+entry_2 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=input_path_MS2)
+entry_2.place(x=131.0, y=123.0, width=146.0, height=28.0)
+button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
+button_3 = Button(image=button_image_3, borderwidth=0, highlightthickness=0, command=raw_MS2_path, relief="flat")
+button_3.place(x=282.0, y=123.0, width=77.21710205078125, height=30.0)
+entry_3 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=output_dir_path)
+entry_3.place(x=168.0, y=764.0, width=146.0, height=28.0)
+button_image_4 = PhotoImage(file=relative_to_assets("button_4.png"))
+button_4 = Button(image=button_image_4, borderwidth=0, highlightthickness=0, command=output_path_get, relief="flat")
+button_4.place(x=319.0, y=764.0, width=77.21710205078125, height=30.0)
+entry_4 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=fasta_path)
+entry_4.place(x=531.0, y=329.0, width=146.0, height=28.0)
+button_image_5 = PhotoImage(file=relative_to_assets("button_5.png"))
+button_5 = Button(image=button_image_5, borderwidth=0, highlightthickness=0, command=fasta_db_get, relief="flat")
+button_5.place(x=682.0, y=329.0, width=77.21710205078125, height=30.0)
+entry_5 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=database_csv_path)
+entry_5.place(x=121.0, y=329.0, width=146.0, height=28.0)
+button_image_6 = PhotoImage(file=relative_to_assets("button_6.png"))
+button_6 = Button(image=button_image_6, borderwidth=0, highlightthickness=0, command=prebuilt_db_path, relief="flat")
+button_6.place(x=272.0, y=329.0, width=77.21710205078125, height=30.0)
+entry_6 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0)
+entry_6.insert(END, 'entry_6')
+entry_6.place(x=121.0, y=388.0, width=146.0, height=28.0)
+button_image_7 = PhotoImage(file=relative_to_assets("button_7.png"))
+button_7 = Button(image=button_image_7, borderwidth=0, highlightthickness=0, command=lambda: print("button_7 clicked"), relief="flat")
+button_7.place(x=272.0, y=388.0, width=77.21710205078125, height=30.0)
+entry_7 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=target_peptide_list_path)
+entry_7.place(x=121.0, y=388.0, width=146.0, height=28.0)
+button_image_8 = PhotoImage(file=relative_to_assets("button_8.png"))
+button_8 = Button(image=button_image_8, borderwidth=0, highlightthickness=0, command=target_list_path_get, relief="flat")
+button_8.place(x=272.0, y=388.0, width=77.21710205078125, height=30.0)
+entry_8 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=motif_db_path)
+entry_8.place(x=141.0, y=624.0, width=146.0, height=28.0)
+entry_10 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=max_fragment_z)
+entry_10.place(x=712.0, y=214.0, width=53.0, height=28.0)
+entry_11 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=max_precursor_z)
+entry_11.place(x=537.0, y=213.0, width=53.0, height=28.0)
+entry_12 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=min_intensity)
+entry_12.place(x=352.0, y=213.0, width=53.0, height=28.0)
+entry_13 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=mz_range_max)
+entry_13.place(x=196.0, y=213.0, width=53.0, height=28.0)
+entry_14 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=mz_range_min)
+entry_14.place(x=106.0, y=213.0, width=53.0, height=28.0)
+entry_15 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=max_mods_pep)
+entry_15.place(x=685.0, y=483.0, width=53.0, height=28.0)
+entry_16 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=fragment_err)
+entry_16.place(x=439.0, y=483.0, width=53.0, height=28.0)
+entry_17 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=precursor_err)
+entry_17.place(x=189.0, y=483.0, width=53.0, height=28.0)
+entry_18 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=confident_coverage_threshold)
+entry_18.place(x=685.0, y=621.0, width=53.0, height=28.0)
+entry_20 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=FDR_threshold)
+entry_20.place(x=472.0, y=669.0, width=53.0, height=28.0)
+entry_21 = Entry(bd=0, bg="#FFFFFF", highlightthickness=0, textvariable=eg_threshold)
+entry_21.place(x=685.0, y=669.0, width=53.0, height=28.0)
+button_image_9 = PhotoImage(file=relative_to_assets("button_9.png"))
+button_9 = Button(image=button_image_9, borderwidth=0, highlightthickness=0, command=motif_db_get, relief="flat")
+button_9.place(x=292.0, y=624.0, width=77.21710205078125, height=30.0)
+canvas.create_rectangle(138.0, 544.0, 156.0, 562.0, fill="#D9D9D9", outline="")
+canvas.create_rectangle(295.0, 544.0, 313.0, 562.0, fill="#D9D9D9", outline="")
+canvas.create_rectangle(417.0, 544.0, 435.0, 562.0, fill="#D9D9D9", outline="")
+canvas.create_rectangle(652.0, 544.0, 670.0, 562.0, fill="#D9D9D9", outline="")
+canvas.create_rectangle(542.0, 544.0, 560.0, 562.0, fill="#D9D9D9", outline="")
 
-canvas.create_text(
-    20.0,
-    216.0,
-    anchor="nw",
-    text="m/z range",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
 
-canvas.create_text(
-    171.0,
-    219.0,
-    anchor="nw",
-    text="-",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
 
-canvas.create_text(
-    270.0,
-    210.0,
-    anchor="nw",
-    text="minimum\nintensity",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
 
-canvas.create_text(
-    420.0,
-    210.0,
-    anchor="nw",
-    text="max precursor\ncharge",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
 
-canvas.create_text(
-    600.0,
-    210.0,
-    anchor="nw",
-    text="max fragment\ncharge",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
-
-canvas.create_text(
-    5.0,
-    166.0,
-    anchor="nw",
-    text="2. Spectral processing",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)
-
-canvas.create_text(
-    5.0,
-    76.0,
-    anchor="nw",
-    text="1. Spectral input",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)
-
-canvas.create_rectangle(
-    10.0,
-    109.0,
-    369.0,
-    166.0,
-    fill="#D9D9D9",
-    outline="")
-
-canvas.create_text(
-    32.0,
-    128.0,
-    anchor="nw",
-    text="Raw .MS2",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_rectangle(
-    411.0,
-    109.0,
-    770.0,
-    166.0,
-    fill="#D9D9D9",
-    outline="")
-
-entry_image_1 = PhotoImage(
-    file=relative_to_assets("entry_1.png"))
-entry_bg_1 = canvas.create_image(
-    600.0,
-    138.0,
-    image=entry_image_1
-)
-entry_1 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=input_path_format_MS2
-)
-
-entry_1.place(
-    x=527.0,
-    y=123.0,
-    width=146.0,
-    height=28.0
-)
-
-canvas.create_text(
-    440.0,
-    119.0,
-    anchor="nw",
-    text="Formatted\nRaw .MS2",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
-
-canvas.create_text(
-    332.0,
-    125.0,
-    anchor="nw",
-    text="or",
-    fill="#FFFFFF",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    5.0,
-    582.0,
-    anchor="nw",
-    text="5. PSM assignment",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)
-
-canvas.create_rectangle(
-    10.0,
-    613.0,
-    770.0,
-    715.0,
-    fill="#D9D9D9",
-    outline="")
-
-canvas.create_text(
-    14.0,
-    626.0,
-    anchor="nw",
-    text="Motif database",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    425.0,
-    626.0,
-    anchor="nw",
-    text="Confident coverage threshold (%)",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-
-canvas.create_text(
-    5.0,
-    720.0,
-    anchor="nw",
-    text="6. Export results",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)
-
-canvas.create_rectangle(
-    10.0,
-    749.0,
-    411.0,
-    808.0,
-    fill="#D9D9D9",
-    outline="")
-
-canvas.create_text(
-    29.0,
-    769.0,
-    anchor="nw",
-    text="Output directory",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    5.0,
-    265.0,
-    anchor="nw",
-    text="3. Database definition",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)
-
-canvas.create_rectangle(
-    10.0,
-    315.0,
-    369.0,
-    436.0,
-    fill="#D9D9D9",
-    outline="")
-
-canvas.create_text(
-    32.0,
-    334.0,
-    anchor="nw",
-    text="Database",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    21.0,
-    388.0,
-    anchor="nw",
-    text="Target\npeptide list",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
-
-canvas.create_text(
-    338.0,
-    335.0,
-    anchor="nw",
-    text="or",
-    fill="#FFFFFF",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    7.0,
-    293.0,
-    anchor="nw",
-    text="Pre-built database",
-    fill="#FFFFFF",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    420.0,
-    293.0,
-    anchor="nw",
-    text="Generate from .fasta",
-    fill="#FFFFFF",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_rectangle(
-    414.0,
-    316.0,
-    773.0,
-    374.0,
-    fill="#D9D9D9",
-    outline="")
-
-canvas.create_text(
-    436.0,
-    335.0,
-    anchor="nw",
-    text="Database",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_rectangle(
-    10.0,
-    466.0,
-    773.0,
-    579.0,
-    fill="#D9D9D9",
-    outline="")
-
-canvas.create_text(
-    25.0,
-    489.0,
-    anchor="nw",
-    text="Precursor error (ppm)",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-canvas.create_text(
-    14.0,
-    540.0,
-    anchor="nw",
-    text="Modifications",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-
-# amid_check = Checkbutton(canvas, onvalue=1, offvalue=0, variable=amid_var, bg= '#D9D9D9')
-# amid_check.place(x = 130, y = 538)
-
-# canvas.create_text(
-#     158.0,
-#     542.0,
-#     anchor="nw",
-#     text="C-terminal amidation",
-#     fill="#000000",
-#     font=("Inter SemiBold", 12 * -1)
-# )
-
-canvas.create_text(
-    280.0,
-    489.0,
-    anchor="nw",
-    text="Fragment error (Da)",
-    fill="#000000",
-    font=("Inter", 16 * -1)
-)
-#######
-button_modification = Button(
-    text='Select Modifications',
-    borderwidth=0,
-    highlightthickness=0,
-    command=print('Modifications'),
-    relief="flat"
-)
-button_modification.place(
-    x=125.0,
-    y=535.0,
-    width=150,
-    height=30.0
-)
-#############
-canvas.create_text(
-    550.0,
-    489.0,
-    anchor="nw",
-    text="Max mods/peptide",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
-
-canvas.create_text(
-    5.0,
-    436.0,
-    anchor="nw",
-    text="4. Database search",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)
-
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=begin_search,
-    relief="flat"
-)
-button_1.place(
-    x=9.0,
-    y=820.0,
-    width=401.0,
-    height=59.0
-)
-
-# canvas.create_text(
-#     5.0,
-#     0.0,
-#     anchor="nw",
-#     text="EndoGenius",
-#     fill="#FFFFFF",
-#     font=("Inter", 64 * -1)
-# )
-
-image_image_0 = PhotoImage(
-    file=relative_to_assets("EndoGenius_Logo_12.png"))
-image_0 = canvas.create_image(
-    400.0,
-    60.0,
-    image=image_image_0
-)
-
-image_image_1 = PhotoImage(
-    file=relative_to_assets("image_1.png"))
-image_1 = canvas.create_image(
-    617.0,
-    799.0,
-    image=image_image_1
-)
-
-canvas.create_text(
-    390.0,
-    668.0,
-    anchor="nw",
-    text="FDR\nThreshold",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
-
-canvas.create_text(
-    550.0,
-    668.0,
-    anchor="nw",
-    text="EndoGenius Score\nThreshold",
-    fill="#000000",
-    font=("Inter", 16 * -1),
-    justify='center'
-)
-
-button_image_2 = PhotoImage(
-    file=relative_to_assets("button_2.png"))
-button_2 = Button(
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=formatted_MS2_path,
-    relief="flat"
-)
-button_2.place(
-    x=678.0,
-    y=123.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_2 = PhotoImage(
-    file=relative_to_assets("entry_2.png"))
-entry_bg_2 = canvas.create_image(
-    204.0,
-    138.0,
-    image=entry_image_2
-)
-entry_2 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable = input_path_MS2
-)
-entry_2.place(
-    x=131.0,
-    y=123.0,
-    width=146.0,
-    height=28.0
-)
-
-button_image_3 = PhotoImage(
-    file=relative_to_assets("button_3.png"))
-button_3 = Button(
-    image=button_image_3,
-    borderwidth=0,
-    highlightthickness=0,
-    command=raw_MS2_path,
-    relief="flat"
-)
-button_3.place(
-    x=282.0,
-    y=123.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_3 = PhotoImage(
-    file=relative_to_assets("entry_3.png"))
-entry_bg_3 = canvas.create_image(
-    241.0,
-    779.0,
-    image=entry_image_3
-)
-entry_3 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=output_dir_path
-)
-
-entry_3.place(
-    x=168.0,
-    y=764.0,
-    width=146.0,
-    height=28.0
-)
-
-button_image_4 = PhotoImage(
-    file=relative_to_assets("button_4.png"))
-button_4 = Button(
-    image=button_image_4,
-    borderwidth=0,
-    highlightthickness=0,
-    command=output_path_get,
-    relief="flat"
-)
-button_4.place(
-    x=319.0,
-    y=764.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_4 = PhotoImage(
-    file=relative_to_assets("entry_4.png"))
-entry_bg_4 = canvas.create_image(
-    604.0,
-    344.0,
-    image=entry_image_4
-)
-entry_4 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=fasta_path
-)
-
-entry_4.place(
-    x=531.0,
-    y=329.0,
-    width=146.0,
-    height=28.0
-)
-
-button_image_5 = PhotoImage(
-    file=relative_to_assets("button_5.png"))
-button_5 = Button(
-    image=button_image_5,
-    borderwidth=0,
-    highlightthickness=0,
-    command=fasta_db_get,
-    relief="flat"
-)
-button_5.place(
-    x=682.0,
-    y=329.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_5 = PhotoImage(
-    file=relative_to_assets("entry_5.png"))
-entry_bg_5 = canvas.create_image(
-    194.0,
-    344.0,
-    image=entry_image_5
-)
-entry_5 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=database_csv_path
-)
-
-entry_5.place(
-    x=121.0,
-    y=329.0,
-    width=146.0,
-    height=28.0
-)
-
-button_image_6 = PhotoImage(
-    file=relative_to_assets("button_6.png"))
-button_6 = Button(
-    image=button_image_6,
-    borderwidth=0,
-    highlightthickness=0,
-    command=prebuilt_db_path,
-    relief="flat"
-)
-button_6.place(
-    x=272.0,
-    y=329.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_6 = PhotoImage(
-    file=relative_to_assets("entry_6.png"))
-entry_bg_6 = canvas.create_image(
-    194.0,
-    403.0,
-    image=entry_image_6
-)
-entry_6 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0
-)
-entry_6.insert(END,'entry_6')
-entry_6.place(
-    x=121.0,
-    y=388.0,
-    width=146.0,
-    height=28.0
-)
-
-button_image_7 = PhotoImage(
-    file=relative_to_assets("button_7.png"))
-button_7 = Button(
-    image=button_image_7,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_7 clicked"),
-    relief="flat"
-)
-button_7.place(
-    x=272.0,
-    y=388.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_7 = PhotoImage(
-    file=relative_to_assets("entry_7.png"))
-entry_bg_7 = canvas.create_image(
-    194.0,
-    403.0,
-    image=entry_image_7
-)
-entry_7 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=target_peptide_list_path
-)
-
-entry_7.place(
-    x=121.0,
-    y=388.0,
-    width=146.0,
-    height=28.0
-)
-
-button_image_8 = PhotoImage(
-    file=relative_to_assets("button_8.png"))
-button_8 = Button(
-    image=button_image_8,
-    borderwidth=0,
-    highlightthickness=0,
-    command=target_list_path_get,
-    relief="flat"
-)
-button_8.place(
-    x=272.0,
-    y=388.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-entry_image_8 = PhotoImage(
-    file=relative_to_assets("entry_8.png"))
-entry_bg_8 = canvas.create_image(
-    214.0,
-    639.0,
-    image=entry_image_8
-)
-entry_8 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=motif_db_path
-)
-
-entry_8.place(
-    x=141.0,
-    y=624.0,
-    width=146.0,
-    height=28.0
-)
-
-
-entry_image_10 = PhotoImage(
-    file=relative_to_assets("entry_10.png"))
-entry_bg_10 = canvas.create_image(
-    738.5,
-    229.0,
-    image=entry_image_10
-)
-entry_10 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable = max_fragment_z
-)
-
-entry_10.place(
-    x=712.0,
-    y=214.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_11 = PhotoImage(
-    file=relative_to_assets("entry_11.png"))
-entry_bg_11 = canvas.create_image(
-    563.5,
-    228.0,
-    image=entry_image_11
-)
-entry_11 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable = max_precursor_z
-)
-
-entry_11.place(
-    x=537.0,
-    y=213.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_12 = PhotoImage(
-    file=relative_to_assets("entry_12.png"))
-entry_bg_12 = canvas.create_image(
-    378.5,
-    228.0,
-    image=entry_image_12
-)
-entry_12 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable = min_intensity
-)
-
-entry_12.place(
-    x=352.0,
-    y=213.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_13 = PhotoImage(
-    file=relative_to_assets("entry_13.png"))
-entry_bg_13 = canvas.create_image(
-    222.5,
-    228.0,
-    image=entry_image_13
-)
-entry_13 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=mz_range_max
-)
-
-entry_13.place(
-    x=196.0,
-    y=213.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_14 = PhotoImage(
-    file=relative_to_assets("entry_14.png"))
-entry_bg_14 = canvas.create_image(
-    132.5,
-    228.0,
-    image=entry_image_14
-)
-entry_14 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable= mz_range_min
-)
-
-entry_14.place(
-    x=106.0,
-    y=213.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_15 = PhotoImage(
-    file=relative_to_assets("entry_15.png"))
-entry_bg_15 = canvas.create_image(
-    711.5,
-    498.0,
-    image=entry_image_15
-)
-entry_15 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable= max_mods_pep
-)
-
-entry_15.place(
-    x=685.0,
-    y=483.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_16 = PhotoImage(
-    file=relative_to_assets("entry_16.png"))
-entry_bg_16 = canvas.create_image(
-    465.5,
-    498.0,
-    image=entry_image_16
-)
-entry_16 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=fragment_err
-)
-
-entry_16.place(
-    x=439.0,
-    y=483.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_17 = PhotoImage(
-    file=relative_to_assets("entry_17.png"))
-entry_bg_17 = canvas.create_image(
-    215.5,
-    498.0,
-    image=entry_image_17
-)
-entry_17 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=precursor_err
-)
-
-entry_17.place(
-    x=189.0,
-    y=483.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_18 = PhotoImage(
-    file=relative_to_assets("entry_18.png"))
-entry_bg_18 = canvas.create_image(
-    711.5,
-    636.0,
-    image=entry_image_18
-)
-entry_18 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=confident_coverage_threshold
-)
-
-entry_18.place(
-    x=685.0,
-    y=621.0,
-    width=53.0,
-    height=28.0
-)
-
-
-
-entry_image_20 = PhotoImage(
-    file=relative_to_assets("entry_20.png"))
-entry_bg_20 = canvas.create_image(
-    498.5,
-    684.0,
-    image=entry_image_20
-)
-entry_20 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=FDR_threshold
-)
-
-entry_20.place(
-    x=472.0,
-    y=669.0,
-    width=53.0,
-    height=28.0
-)
-
-entry_image_21 = PhotoImage(
-    file=relative_to_assets("entry_21.png"))
-entry_bg_21 = canvas.create_image(
-    711.5,
-    684.0,
-    image=entry_image_21
-)
-entry_21 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    textvariable=eg_threshold
-)
-
-entry_21.place(
-    x=685.0,
-    y=669.0,
-    width=53.0,
-    height=28.0
-)
-
-button_image_9 = PhotoImage(
-    file=relative_to_assets("button_9.png"))
-button_9 = Button(
-    image=button_image_9,
-    borderwidth=0,
-    highlightthickness=0,
-    command=motif_db_get,
-    relief="flat"
-)
-button_9.place(
-    x=292.0,
-    y=624.0,
-    width=77.21710205078125,
-    height=30.0
-)
-
-canvas.create_rectangle(
-    138.0,
-    544.0,
-    156.0,
-    562.0,
-    fill="#D9D9D9",
-    outline="")
-
-# ox_check = Checkbutton(canvas, onvalue=1, offvalue=0, variable=ox_var, bg= '#D9D9D9')
-# ox_check.place(x = 288, y = 538)
-
-# canvas.create_text(
-#     315.0,
-#     542.0,
-#     anchor="nw",
-#     text="Oxidation of M",
-#     fill="#000000",
-#     font=("Inter SemiBold", 12 * -1)
-# )
-
-canvas.create_rectangle(
-    295.0,
-    544.0,
-    313.0,
-    562.0,
-    fill="#D9D9D9",
-    outline="")
-
-# pgE_check = Checkbutton(canvas, onvalue=1, offvalue=0, variable=pgE_var, bg= '#D9D9D9')
-# pgE_check.place(x = 410, y = 538)
-
-# canvas.create_text(
-#     437.0,
-#     542.0,
-#     anchor="nw",
-#     text="Pyro-glu from E",
-#     fill="#000000",
-#     font=("Inter SemiBold", 12 * -1)
-# )
-
-canvas.create_rectangle(
-    417.0,
-    544.0,
-    435.0,
-    562.0,
-    fill="#D9D9D9",
-    outline="")
-
-# pgQ_check = Checkbutton(canvas, onvalue=1, offvalue=0, variable=pgQ_var, bg= '#D9D9D9')
-# pgQ_check.place(x = 645, y = 538)
-
-
-# canvas.create_text(
-#     672.0,
-#     542.0,
-#     anchor="nw",
-#     text="Pyro-glu from Q",
-#     fill="#000000",
-#     font=("Inter SemiBold", 12 * -1)
-# )
-
-canvas.create_rectangle(
-    652.0,
-    544.0,
-    670.0,
-    562.0,
-    fill="#D9D9D9",
-    outline="")
-
-# sulfY_check = Checkbutton(canvas, onvalue=1, offvalue=0, variable=sulf_var, bg= '#D9D9D9')
-# sulfY_check.place(x = 535, y = 538)
-
-# canvas.create_text(
-#     562.0,
-#     542.0,
-#     anchor="nw",
-#     text="Sulfation of Y",
-#     fill="#000000",
-#     font=("Inter SemiBold", 12 * -1)
-# )
-
-canvas.create_rectangle(
-    542.0,
-    544.0,
-    560.0,
-    562.0,
-    fill="#D9D9D9",
-    outline="")
 
 window.resizable(False, False)
 window.mainloop()

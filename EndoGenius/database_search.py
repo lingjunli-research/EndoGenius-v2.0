@@ -26,7 +26,6 @@ pd.options.mode.chained_assignment = None
 
 print('Database Search')
 
-
 def raw_file_detail_extraction(raw_file_formatted_path,output_parent_directory):
     backslash_index_1 = raw_file_formatted_path.rfind('\\')
     backslash_index_2 = raw_file_formatted_path.rfind('/')
@@ -48,7 +47,6 @@ def raw_file_detail_extraction(raw_file_formatted_path,output_parent_directory):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    ### generate output folder ###
     return sample_name, output_folder
 
 def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_directory,raw_file_formatted_path,precursor_error_cutoff,
@@ -160,8 +158,7 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
     adducts = {
         'H2O' : H * 2 + O,
         'NH3' : N + H * 3}
-    
-    #%%
+
     def seq_coverage_calc(merge_fragment_match_filtered,ion_report,scan_to_report,peptide):
         frag_merge_match_filtered = merge_fragment_match_filtered[merge_fragment_match_filtered['Fragment error (Da)'] <= fragment_error_cutoff]
         if len(frag_merge_match_filtered)>0:
@@ -667,25 +664,4 @@ def launch_db_search_pt1(predefined_db_path,output_parent_directory,choose_mzml_
                 all_correlation_results.to_csv(filec,index=False)
         
         return all_correlation_results
-        
-        subject = 'Your code for '+sample_name+' has finished running'
-        text = 'Your code for '+sample_name+' has finished running'
-        content = 'Subject: %s\n\n%s' % (subject, text)
-        mail = smtplib.SMTP('smtp.gmail.com',587)
-        mail.ehlo()
-        mail.starttls()
-        mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-        mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-        mail.close()
-        
-      
-    
-    subject = 'Your code has finished running'
-    text = 'Your code has finished running'
-    content = 'Subject: %s\n\n%s' % (subject, text)
-    mail = smtplib.SMTP('smtp.gmail.com',587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-    mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-    mail.close()
+

@@ -13,18 +13,6 @@ import pandas as pd
 import csv
 from pyteomics import parser
 
-# fasta_path = r"C:\Users\lawashburn\Desktop\ALC50_Mass_Search_Files\duplicate_removed_crustacean_database_validated_formatted20220725.fasta"
-# output_folder = r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.2\04"
-
-# variable_mod_dict = {
-#     '12PlexDiLeu-': True,
-#     '-Amidated': True,
-#     '(Pyro-glu)': ['ntermE'],
-#     '(12PlexDiLeu)': ['K']  # Add the custom modification to lysine (K)
-# }
-
-# max_mods_number = 3
-
 def make_a_DB(variable_mod_dict,fasta_path,output_folder,max_mods_number):
 
 
@@ -273,4 +261,3 @@ def make_a_DB(variable_mod_dict,fasta_path,output_folder,max_mods_number):
             df.to_csv(filec,index=False) 
             
     return file_path
-#make_a_DB(variable_mod_dict,fasta_path,output_folder,max_mods_number)

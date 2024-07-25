@@ -68,28 +68,17 @@ def endogenius_apply(dsd_summary_results,target_results,output_directory,eg_cuto
                                                          'precursor_z',
                                                          'null'})
         
-        target_results = dsd_summary_results_per_sample[dsd_summary_results_per_sample['Status'] == True]
-        
+        target_results = dsd_summary_results_per_sample[dsd_summary_results_per_sample['Status'] == True]       
         decoy_results = dsd_summary_results_per_sample[dsd_summary_results_per_sample['Status'] == False]
-        #for ind in dsd_summary_results_per_sample.index:
+
         for a in range(1,(number_runs+1)):
                 target_scores = target_results['Final score, run: ' + str(a)].values.tolist()
                 decoy_scores = decoy_results['Final score, run: ' + str(a)].values.tolist()
                 
                 all_scores = dsd_summary_results['Final score, run: ' + str(a)].values.tolist()
                 min_scores = 0
-                max_scores = (max(all_scores)) +10
-                
-                #bins = np.linspace(min_scores, max_scores, 50)
-                        
+                max_scores = (max(all_scores)) +10    
                 int_list_no_dups = list(set(target_scores))
-                
-                # for aa in target_scores:
-                #     aaa = int(aa)
-                #     if aaa not in int_list_no_dups:
-                #         int_list_no_dups.append(aaa)
-                
-                
                 score_list_sorted = list(reversed(sorted(int_list_no_dups)))
                 
                 score_cutoff = []
@@ -202,31 +191,4 @@ def endogenius_apply(dsd_summary_results,target_results,output_directory,eg_cuto
         dsd_merge_table['Run #'] = run_log
         dsd_merge_table['# Target IDs'] = num_target_IDs_log
         dsd_merge_table['# Unique Target IDs'] = num_unique_IDs
-
-            
-        # file_path = output_directory + '\\dsd_eval_' +  sample + '.csv'
-        # with open(file_path,'w',newline='') as filec:
-        #         writerc = csv.writer(filec)
-        #         dsd_merge_table.to_csv(filec,index=False)
-        
         return dsd_merge_table
-                    
-        # subject = 'Your code has finished running'
-        # text = 'FDR-DSD evaluation completed for ' + sample
-        # content = 'Subject: %s\n\n%s' % (subject, text)
-        # mail = smtplib.SMTP('smtp.gmail.com',587)
-        # mail.ehlo()
-        # mail.starttls()
-        # mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-        # mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-        # mail.close()
-    
-    subject = 'Your code has finished running'
-    text = 'FDR-DSD evaluation completed for all samples'
-    content = 'Subject: %s\n\n%s' % (subject, text)
-    mail = smtplib.SMTP('smtp.gmail.com',587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-    mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-    mail.close()

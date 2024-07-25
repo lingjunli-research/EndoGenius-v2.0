@@ -15,9 +15,6 @@ print('Results Metric Extract')
 
 def results_metric_extract_start(results_directory,output_directory,sample_output_directory):
 
-    # results_directory = r"C:\Users\lawashburn\Documents\DB_pep_validation\DB_search_w_mod_20230629"
-    # output_directory = r"C:\Users\lawashburn\Documents\DB_pep_validation\motif_percent_assess_2023010"
-    
     def get_dir_names_with_strings_list(str_list): #definition for finding a file containing a string in filename in specified directory
         full_list = [ name for name in os.listdir(results_directory) if os.path.isdir(os.path.join(results_directory, name)) ]
         final_list = [nm for ps in str_list for nm in full_list if ps in nm]
@@ -302,13 +299,4 @@ def results_metric_extract_start(results_directory,output_directory,sample_outpu
             final_weighting_metrics.to_csv(filec,index=False)
     
     return final_weighting_metrics
-    
-    subject = 'Your code has finished running'
-    text = 'Weighting metric extraction for all samples has finished running'
-    content = 'Subject: %s\n\n%s' % (subject, text)
-    mail = smtplib.SMTP('smtp.gmail.com',587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-    mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-    mail.close()
+

@@ -11,10 +11,6 @@ from library_filtering_test_for_peaks import library_filtering
 from lib_formatting_for_DIANN import format_lib
 import os
 
-# parent_results_directory = r"D:\Manuscripts\2024_EndoGeniusDIA\fractionated_SL_data"
-# output_directory = r"C:\Users\lawashburn\Documents\EndoGeniusDistributions\version_assessment_output\EndoGenius_v1.1.0\sl_test"
-# fragment_error = 0.02
-
 def build_a_SL(parent_results_directory,output_directory,fragment_error):
 
     def make_directory(directory):

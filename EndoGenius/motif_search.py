@@ -111,13 +111,3 @@ def start_motif_search(psm_assignments_path_parent_directory,motif_database_path
                 psm_w_motif_report.to_csv(filec,index=False)
         
         return psm_w_motif_report
-        
-    subject = 'Your code has finished running'
-    text = 'Motif analysis for all samples has finished running'
-    content = 'Subject: %s\n\n%s' % (subject, text)
-    mail = smtplib.SMTP('smtp.gmail.com',587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login('lingjun.li.notifications@gmail.com','eabtnjwaikdssdtd')
-    mail.sendmail('lingjun.li.notifications@gmail.com','lawashburn@wisc.edu',content) 
-    mail.close()

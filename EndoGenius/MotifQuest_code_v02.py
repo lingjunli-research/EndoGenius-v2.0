@@ -18,20 +18,8 @@ import csv
 from scipy.cluster.hierarchy import linkage, fcluster, inconsistent
 from scipy.spatial.distance import squareform
 
-#t_list_filename = os.path.join("C:/Users/15156/Desktop/motif_JASMS_paper/new_distance_matrix_calc/for_conserved_t_list", "t_list.ampy") 
-
-
-
-
-
-
-
-
 def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,motif_instances,clustalo_path):
 
-
-    
-    
     flank_size = 0
     out_file = output_folder_path + "\\np.fasta"
     distance_matrix_file = "distance_matrixNPs.txt" 
@@ -57,34 +45,19 @@ def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,mot
     
     
     unaligned_sequences_df = pd.DataFrame(unaligned_sequences)
-    
-    
     command_str_distance_matrix = f'{clustalo_path} -i "{in_file}" -o "{out_file}" --distmat-out="{distance_matrix_file}" --force --full -v'
-    
-    # clustalomega_cline2 = ClustalOmegaCommandline(infile=in_file, outfile=out_file, distmat_out=distance_matrix_file, force=True, distmat_full=True,verbose=True, auto=True)
-    # command_str_alignment2 = str(clustalomega_cline2)
-    # result = subprocess.call(command_str_alignment2, cwd=working_dir, shell=True)
-    
-    # print("Generating distance matrix...")
     result = subprocess.run(command_str_distance_matrix, cwd=working_dir, shell=True, capture_output=True, text=True)
-    
     if result.returncode == 0:
         print("Distance matrix generated successfully.")
-    #%%
     test = (os.path.join(working_dir,in_file))
     
     print(test)
     database_length = sum(1 for _ in SeqIO.parse(in_file, "fasta"))
-    
-    
+
     if os.path.exists(os.path.join(working_dir, distance_matrix_file)):
         distance_matrix = amp.loadtxt(os.path.join(working_dir, distance_matrix_file), skiprows=1, usecols=range(1, database_length + 1))
         print("Distance matrix loaded successfully.")
-    
-    
-    
-    
-    #Path to the output file containing aligned sequences
+
     aligned_file = out_file
     
     # Parse the aligned sequences
@@ -96,9 +69,7 @@ def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,mot
         })
     
     aligned_sequences_df = pd.DataFrame(aligned_sequences)
-    
-    
-    ##############################################################################################3 
+
     sequence_labels = unaligned_sequences_df['Sequence'].tolist()
     
     distance_df = pd.DataFrame(distance_matrix, index=sequence_labels, columns=sequence_labels)
@@ -154,12 +125,7 @@ def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,mot
             "consensus_sequences": consensus_sequences,
             "iamput_sequences": iamput_sequences_data  
         }
-        
-        
-        #motif extractions from t_value_data 
-        
-        # min_motif_len = 2
-        # flank_size = 0
+
         full_motif_storage = []
         partial_motif_storage = []
         
@@ -243,24 +209,7 @@ def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,mot
         
         
         number_of_motifs = len(set(full_motif_storage + partial_motif_storage))
-        ##################################
-    
-        #motifs to csv for EG DB search 
-        
-        # with open((output_folder_path + '\\full_motif'+ str(t) + '.csv'), 'w', newline='') as file:
-        #     writer = csv.writer(file)
-        #     for item in full_motif_storage:
-        #         writer.writerow([item])
-        
-        # with open(output_folder_path + '\\partial_motif' + str(t) + '.csv', 'w', newline='') as file:
-        #     writer = csv.writer(file)
-        #     for item in partial_motif_storage:
-        #         writer.writerow([item])
-        
-        ##############################################################################
-    
-        #matching motifs to the og sequences
-        #remove dupes 
+ 
         full_motif_storage = list(set(full_motif_storage))
         partial_motif_storage = list(set(partial_motif_storage)) #shouldnt have any but good measure 
         
@@ -293,11 +242,7 @@ def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,mot
             
             partial_matching_motifs[par_mot] = partial_matching_sequences
         print("matching partial motifs finished.")
-        
-        ###############################################################################
-        #EndoGenius Score 
-        #full motifs
-        
+
         def EG_motif_dictionaries(partial_matching_motifs, full_motif_matches):
             results = {
                 "partial_motif_EG_score": {},
@@ -373,12 +318,3 @@ def start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,mot
         
         full_motif_df.to_csv(output_folder_path + '\\full_motif_report_' + str(t) +'.csv')
         partial_motif_df.to_csv(output_folder_path + '\\partial_motif_report_' + str(t) + '.csv')
-
-# in_file = r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\input\duplicate_removed_crustacean_database_validated_formatted20220725.fasta"
-# output_folder_path = r"D:\Manuscripts\2024_MotifQuest\MotifQuest_for_EG\output"
-# t_val = [0]
-# min_motif_len = 2
-# motif_instances = 2
-# clustalo_path = r"C:\Users\lawashburn\Downloads\clustal-omega-1.2.2\clustal-omega-1.2.2-win64\clustalo.exe"
-
-# start_building_a_motif_db(in_file,output_folder_path,t_val,min_motif_len,motif_instances,clustalo_path)
