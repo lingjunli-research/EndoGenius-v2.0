@@ -12,10 +12,10 @@ EndoGenius is a program produced by the Lingjun Li Lab at the University of Wisc
 * [User manual](https://docs.google.com/document/d/e/2PACX-1vRwKSjIl6wu88MTObZ7G0QYl9wzg7Rm065o4AxM1zzAMspEfHChLMcHMmWFWD8BjLIKSsvsqONeHknb/pub)
 
 #### Release notes
-##### Version 1.1.4
+##### Version 1.1.4 (Released 8/20/24)
 * Support for extended library of PTMs
 * Capability to search DiLeu-labeled peptides
-##### Version 1.1.0
+##### Version 1.1.0 (Released 6/25/24)
 * Integration of spectral library construction for DIA analysis
 * Integration of MotifQuest
 * Capability for either FDR or EndoGenius score cutoffs
