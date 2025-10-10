@@ -1,3 +1,5 @@
+### Note: the most recent repository updates will be pushed to the main EndoGenius repo: [EndoGenius](https://github.com/lingjunli-research/EndoGenius)
+
 <div align="center">
 <img src="https://github.com/user-attachments/assets/9c44a28d-2e48-4959-904f-ca571fc44af3">
 </div>
